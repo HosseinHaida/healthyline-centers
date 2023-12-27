@@ -1,0 +1,45 @@
+const errMessages = {
+  needToSignInToDownload: "جهت دانلود به حساب کاربری خود وارد شوید",
+  shortPassword: "طول کلمه عبور کوتاه است",
+  noPersianPlease: "کاراکترهای فارسی مجاز نیستند",
+  emptyFileds: "لطفاً قسمت‌های خالی را پر کنید",
+  notValidEmail: "ایمیل معتبر نیست",
+  noInput: "فیلدهای خالی را پر کنید",
+  enterValidPass: "رمز عبور معتبر نیست",
+  wrongPass: "رمز عبور اشتباه است",
+  operationFailed: "عملیات ناموفق",
+  userNotFound: "کاربر یافت نشد",
+  tokenNotFound: "توکن یافت نشد",
+  authFailed: "احراز هویت با خطا مواجه شد",
+  passDonotMatch: "تایید کلمه عبور اشتباه است",
+  credsMissing: "توکن ارسال نشده است",
+  couldNotFetchUser: "دریافت کاربر با خطا مواجه شد",
+  oldPassMissing: "کلمه عبور قبلی را وارد کنید",
+  incorrectPass: "کلمه عبور اشتباه است",
+  uploadFailed: "بارگذاری با خطا مواجه شد",
+  sysErrorWhenUploading: "خطای سیستمی در هنگام بارگذاری",
+  transactionFailed: "تراکنش با خطا مواجه شد",
+  noChanges: "تغییری مشاهده نشد",
+  usernameAlreadyExists: "نام کاربری قبلا انتخاب شده است",
+  pleaseInsertUsername: "لطفاً یک نام کاربری وارد کنید",
+  notAuthorized: "عدم وجود مجوز",
+  onlyPersianForName: "لطفاً نام و نام خوانوادگی خود را فارسی انتخاب کنید",
+  usernameContainsPersian: "استفاده از حروف فارسی در نام کاربری مجاز نیست",
+  phoneIsEmpty:
+    "لطفا ابتدا شماره همراه و ایمیل خود را در پنل کاربری تکمیل نمایید",
+  noActiveSubscriptionFound:
+    "در صورت تمایل به دانلود این کیفیت یک اشتراک دلخواه خریداری نمایید",
+  trxNotFound: "تراکنش یافت نشد",
+  phoneShouldBeLike: " شماره همراه شامل ۱۱ رقم و شروع با 09",
+
+  noCentersInitialized: "مرکزی با اطلاعات اکانت شما یافت نشد",
+  alreadyAddedACenter: "یک مرکز با اطلاعات حساب شما قبلا ثبت شده است",
+  failedFetchingCenter: "دریافت اطلاعات مرکز حساب شما با خطا مواجه شد",
+  onlyPersianForName: "لطفاً در نام از حروف فارسی استفاده کنید",
+  issuesSavingPhoto: "خطا در بارگزاری تصاویر",
+  addUploadParamsFailed: "خطا در کانفیگ آپلود",
+}
+
+module.exports = {
+  errMessages,
+}
