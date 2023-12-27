@@ -5,17 +5,11 @@
     >
       <div class="flex items-center gap-10">
         <NuxtLink class="nav-link" to="/">خانه</NuxtLink>
-        <NuxtLink class="nav-link" to="/app">ورود به سامانه</NuxtLink>
-        <NuxtLink class="nav-link" to="/subs">خرید اشتراک</NuxtLink>
-        <NuxtLink class="nav-link" to="/create-resume">
-          ایجاد رزومه علمی-کاربردی
-        </NuxtLink>
-        <NuxtLink class="nav-link" to="/family-member"
-          >عضو خانواده هست؟</NuxtLink
-        >
-        <NuxtLink class="nav-link" to="/validity-check">
-          تأیید اصالت گواهی کار
-        </NuxtLink>
+        <NuxtLink class="nav-link">ورود به سامانه</NuxtLink>
+        <NuxtLink class="nav-link">خرید اشتراک</NuxtLink>
+        <NuxtLink class="nav-link"> ایجاد رزومه علمی-کاربردی </NuxtLink>
+        <NuxtLink class="nav-link">عضو خانواده هست؟</NuxtLink>
+        <NuxtLink class="nav-link"> تأیید اصالت گواهی کار </NuxtLink>
       </div>
       <div>
         <img src="/logo.svg" alt="لوگو" class="h-10" />
