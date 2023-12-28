@@ -22,71 +22,8 @@
         </q-card>
 
         <div class="column q-pt-md">
-          <div
-            class="row q-gutter-sm justify-center q-mb-sm"
-            v-for="(step, i) in progress"
-            :key="i"
-          >
-            <div
-              class="flex items-center"
-              :style="{ 'margin-right': step.offset + 'px' }"
-            >
-              <q-icon
-                v-if="step.isNext"
-                size="md"
-                color="primary"
-                name="chevron_left"
-              />
-              <q-icon
-                v-if="step.type === 'hl'"
-                :name="complete ? 'done_all' : 'more_horiz'"
-                size="sm"
-                color="primary"
-                class="q-mr-sm"
-              />
-              <q-btn
-                :to="step.to"
-                :size="step.type === 'hl' ? 'md' : 'lg'"
-                round
-                :disable="!step.complete && !step.isNext"
-                :color="
-                  !step.complete && !step.isNext && step.type !== 'hl'
-                    ? 'grey'
-                    : step.type === 'center'
-                    ? 'positive'
-                    : 'primary'
-                "
-                push
-              >
-                <q-tooltip v-if="step.tooltip"> {{ step.tooltip }}</q-tooltip>
-                <q-icon v-if="step.type !== 'hl'" :name="step.icon" />
-                <span class="text-bold">
-                  {{ step.type === "hl" ? "HL" : "" }}
-                </span>
-              </q-btn>
-            </div>
-
-            <q-chat-message
-              v-if="step.type === 'center'"
-              class="q-pl-sm"
-              text-color="initial"
-              bg-color="green-1"
-            >
-              <div>
-                <div>
-                  {{ step.label }}
-                </div>
-                <div>
-                  <q-icon
-                    name="done"
-                    size="xs"
-                    class="q-mt-xs"
-                    color="positive"
-                    v-if="step.complete"
-                  />
-                </div>
-              </div>
-            </q-chat-message>
+          <div class="q-mb-sm" v-for="(step, i) in progress" :key="i">
+            <ProgressStep :step="step" />
           </div>
         </div>
       </div>
@@ -102,9 +39,11 @@ import axios from "axios";
 import { apiUrl } from "src/stores/variables";
 import { useUserStore } from "src/stores/users-store";
 import { catchError } from "src/stores/action-helpers";
+import ProgressStep from "src/components/ProgressStep.vue";
 
 export default defineComponent({
   name: "IndexPage",
+  components: { ProgressStep },
   setup() {
     const usersStore = useUserStore();
 
