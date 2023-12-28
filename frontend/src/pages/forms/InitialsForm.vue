@@ -1,7 +1,7 @@
 <template>
   <q-page class="q-px-sm q-pt-lg" style="padding-bottom: 100px">
     <q-form @submit="onSubmit" @reset="onReset" class="row">
-      <div class="q-px-md col-sm-12 col-md-6">
+      <div class="q-px-md col-xs-12 col-md-6">
         <q-input
           filled
           v-model="formData.registrationName"
@@ -56,7 +56,7 @@
         </q-input>
       </div>
 
-      <div class="q-px-md col-sm-12 col-md-6">
+      <div class="q-px-md col-xs-12 col-md-6">
         <q-input
           filled
           v-model="formData.postalCode"
