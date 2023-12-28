@@ -8,7 +8,7 @@ const {
   isEmpty,
   generateUserToken,
   comparePassword,
-  doArraysContainTheSame,
+  // doArraysContainTheSame,
   isAllPersian,
   isValidPhone,
 } = require("../helpers/validations")
@@ -101,9 +101,9 @@ const signin = async (req, res) => {
 }
 
 const fetchUser = async (req, res) => {
-  const { phone } = req.user
+  const { username } = req.user
   try {
-    const thisUser = await fetchThisUser(phone)
+    const thisUser = await fetchThisUser(username)
     if (!thisUser) {
       return catchError(errMessages.userNotFound, "notfound", res, error)
     }
