@@ -1,5 +1,4 @@
 const db = require("../../db").Instance()
-// var fs = require("fs")
 const moment = require("moment")
 // const axios = require("axios")
 const {
@@ -10,8 +9,8 @@ const {
   generateUserToken,
   comparePassword,
   doArraysContainTheSame,
-  isValidEmail,
   isAllPersian,
+  isValidPhone,
 } = require("../helpers/validations")
 const { catchError } = require("../tools/catchError")
 
@@ -24,58 +23,43 @@ const { fetchThisUser } = require("../helpers/db")
 // const { p2e } = require("../helpers/strings")
 
 const signup = async (req, res) => {
-  const { email, password, password_confirm } = req.body
-  // Check if email is valid
-  if (!isValidEmail(email)) {
-    error.message = "notValidEmail"
-    return catchError(errMessages.notValidEmail, "bad", res, error)
+  const { phone, password, password_confirm } = req.body
+
+  if (!isValidPhone(phone)) {
+    return catchError(errMessages.notValidPhone, "bad", res, error)
   }
 
   if (password !== password_confirm) {
-    error.message = "passDonotMatch"
     return catchError(errMessages.passDonotMatch, "bad", res, error)
   }
 
-  // Insertion created_at
   const created_at = moment(new Date())
 
-  // Check if emtpy fields
-  if (isEmpty(email) || isEmpty(password)) {
-    error.message = "emptyFields"
+  if (isEmpty(phone) || isEmpty(password)) {
     return catchError(errMessages.emptyFileds, "bad", res, error)
   }
 
-  // Check if there are Persian characters
   if (containsPersian(password)) {
-    error.message = "persianDetected"
     return catchError(errMessages.noPersianPlease, "bad", res, error)
   }
 
-  // Check if password is short
   if (!isShortPassword(password)) {
-    error.message = "shortPassword"
     return catchError(errMessages.shortPassword, "bad", res, error)
   }
 
   const password_hash = hashString(password)
-  const userPayload = {
-    email,
-    password_hash,
-    created_at,
-  }
+  const userPayload = { phone, password_hash, created_at }
   try {
-    // Insert user to DB
     const r = await db("users").insert(userPayload)
     // Select the same user from DB
     const thisUser = await db
-      .select("id", "email", "agreed")
+      .select("id", "phone", "agreed")
       .from({ u: "users" })
-      .where("u.email", userPayload.email)
+      .where("u.phone", userPayload.phone)
       .first()
-    // Generate token for the user
-    const token = generateUserToken(thisUser.id, thisUser.email)
 
-    // Create user obj with token && send to client
+    const token = generateUserToken(thisUser.id, thisUser.phone)
+
     successMessage.user = thisUser
     successMessage.user.token = token
     return res.status(status.created).send(successMessage)
@@ -92,35 +76,22 @@ const signin = async (req, res) => {
   const { username, password } = req.body
 
   if (isEmpty(username) || isEmpty(password)) {
-    error.message = "noInput"
     return catchError(errMessages.noInput, "bad", res, error)
   }
 
   try {
-    // Find user in DB
     const thisUser = await fetchThisUser(username)
 
-    // If user email not found
     if (!thisUser) {
-      error.message = "userNotFound"
       return catchError(errMessages.userNotFound, "notfound", res, error)
     }
 
-    // Check if is account is connected to google
-    if (thisUser.is_g_auth && isEmpty(thisUser.password_hash)) {
-      error.message = "signinWithGoogle"
-      return catchError(errMessages.signinWithGoogle, "bad", res, error)
-    }
-
-    // Check if the right password
     if (!comparePassword(thisUser.password_hash, password)) {
-      error.message = "wrongPass"
       return catchError(errMessages.wrongPass, "bad", res, error)
     }
-    // Generate token for user
-    const token = generateUserToken(thisUser.id, thisUser.email)
+
+    const token = generateUserToken(thisUser.id, thisUser.phone)
     delete thisUser.password_hash
-    // Create user obj with token && send to client
     successMessage.user = thisUser
     successMessage.user.token = token
     return res.status(status.success).send(successMessage)
@@ -130,17 +101,13 @@ const signin = async (req, res) => {
 }
 
 const fetchUser = async (req, res) => {
-  const { email } = req.user
+  const { phone } = req.user
   try {
-    // Find user in DB
-    const thisUser = await fetchThisUser(email)
-    // Check if no one was found
+    const thisUser = await fetchThisUser(phone)
     if (!thisUser) {
-      error.message = "userNotFound"
       return catchError(errMessages.userNotFound, "notfound", res, error)
     }
     delete thisUser.password_hash
-    // Create user obj with token && send to client
     successMessage.user = thisUser
     return res.status(status.success).send(successMessage)
   } catch (error) {
@@ -149,7 +116,7 @@ const fetchUser = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-  const { user_id, email } = req.user
+  const { user_id, phone } = req.user
   const { data } = req.body
 
   if (Object.entries(data).length <= 0) {
@@ -191,7 +158,7 @@ const updateUser = async (req, res) => {
 
   columnsToBeUpdated.updated_at = updated_at
 
-  const updateQuery = db("users").where({ email })
+  const updateQuery = db("users").where({ phone })
 
   let thisUser
   if (!isEmpty(data.new_pass) || !isEmpty(data.username)) {
@@ -199,7 +166,7 @@ const updateUser = async (req, res) => {
       thisUser = await db
         .select("password_hash", "username")
         .from({ u: "users" })
-        .where("u.email", email)
+        .where("u.phone", phone)
         .first()
     } catch (error) {
       return catchError(errMessages.couldNotFetchUser, "error", res, error)
@@ -232,9 +199,9 @@ const updateUser = async (req, res) => {
     // Actually do the update query
     await updateQuery.update(columnsToBeUpdated)
     // Fetch the same user after the update
-    const user = await fetchThisUser(email)
+    const user = await fetchThisUser(phone)
     // Generate token for user
-    const token = generateUserToken(user.id, user.email)
+    const token = generateUserToken(user.id, user.phone)
     delete user.password_hash
     // Create user obj with token && send to client
     successMessage.user = user
@@ -250,7 +217,7 @@ const updateUser = async (req, res) => {
 }
 
 const checkUsernameDuplicate = async (req, res) => {
-  const { user_id, email } = req.user
+  const { user_id, phone } = req.user
   const { username } = req.params
 
   if (!username) {
@@ -263,7 +230,7 @@ const checkUsernameDuplicate = async (req, res) => {
     const userWithThisUsername = await fetchThisUser(username)
 
     successMessage.exists =
-      userWithThisUsername && userWithThisUsername.email ? true : false
+      userWithThisUsername && userWithThisUsername.phone ? true : false
     return res.status(status.success).send(successMessage)
   } catch (error) {
     return catchError(errMessages.operationFailed, "error", res, error)
@@ -271,12 +238,12 @@ const checkUsernameDuplicate = async (req, res) => {
 }
 
 const agreeOnTerms = async (req, res) => {
-  const { user_id, email } = req.user
+  const { user_id, phone } = req.user
   const { version } = req.body
 
   try {
-    await db("users").where({ email }).update({ agreed: true })
-    const thisUser = await fetchThisUser(email)
+    await db("users").where({ phone }).update({ agreed: true })
+    const thisUser = await fetchThisUser(phone)
 
     successMessage.user = thisUser
     return res.status(status.success).send(successMessage)

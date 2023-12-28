@@ -1,52 +1,32 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
-/**
- * Hash Password Method
- * @param {string} password
- * @returns {string} returns hashed password
- */
 const saltRounds = 10
 const salt = bcrypt.genSaltSync(saltRounds)
+
 const hashString = (password) => bcrypt.hashSync(password, salt)
 
-/**
- * comparePassword
- * @param {string} hashedPassword
- * @param {string} password
- * @returns {Boolean} return True or False
- */
 const comparePassword = (hashedPassword, password) => {
   return bcrypt.compareSync(password, hashedPassword)
 }
 
-/**
- * isValidEmail helper method
- * @param {string} email
- * @returns {Boolean} True or False
- */
 const isValidEmail = (email) => {
   const regEx = /\S+@\S+\.\S+/
   return regEx.test(email)
 }
 
-/**
- * isShortPassword helper method
- * @param {string} password
- * @returns {Boolean} True or False
- */
+const isValidPhone = (phone) => {
+  const regEx = new RegExp("^(\\+98|0)?9\\d{9}$")
+  return regEx.test(phone)
+}
+
 const isShortPassword = (password) => {
-  if (password.length <= 8 || password === "") {
+  if (password.length <= 7 || password === "") {
     return false
   }
   return true
 }
 
-/**
- * containsPersian helper method
- * @param {string} password
- * @returns {Boolean} True or False
- */
 const containsPersian = (s) => {
   let arrayOfWordsSeparatedWithSpaces = s.split(" ")
   var p = /[\u0600-\u06FF\s]/
@@ -64,11 +44,6 @@ const isAllPersian = (s) => {
   else return false
 }
 
-/**
- * isEmpty helper method
- * @param {string, integer} input
- * @returns {Boolean} True or False
- */
 const isEmpty = (input) => {
   if (
     input === undefined ||
@@ -83,35 +58,14 @@ const isEmpty = (input) => {
   }
 }
 
-/**
- * empty helper method
- * @param {string, integer} input
- * @returns {Boolean} True or False
- */
-const empty = (input) => {
-  if (input === undefined || input === "") {
-    return true
-  }
-}
-
-/**
- *
- * @param {array, array} input
- * @returns {Boolean} True or False
- */
 const doArraysContainTheSame = (arrayOne, arrayTwo) =>
   arrayOne.sort().join(",") === arrayTwo.sort().join(",")
 
-/**
- * Generate Token
- * @param {string} id
- * @returns {string} token
- */
-const generateUserToken = (id, email) => {
+const generateUserToken = (id, username) => {
   const token = jwt.sign(
     {
       user_id: id,
-      email,
+      username,
     },
     process.env.SECRET,
     { expiresIn: "14d" }
@@ -120,14 +74,14 @@ const generateUserToken = (id, email) => {
 }
 
 module.exports = {
+  hashString,
+  comparePassword,
   isValidEmail,
+  isValidPhone,
   isShortPassword,
   containsPersian,
   isAllPersian,
   isEmpty,
-  empty,
-  hashString,
-  comparePassword,
   generateUserToken,
   doArraysContainTheSame,
 }

@@ -5,16 +5,18 @@
         <div>
           <q-menu>
             <div class="row no-wrap bg-primary">
-              <div v-if="user && user.email" class="column">
+              <div v-if="user && user.phone" class="column">
                 <q-chip
                   color="light"
                   class="q-ma-none text-primary shadow-3 g-rounded-6"
                   square
                   style="min-width: 200px"
                 >
-                  <div class="full-width text-center font-medium">
-                    {{ "(:" }} {{ user.username ? user.username : user.email }}
-                    {{ "@" }}
+                  <div
+                    class="row full-width text-center font-medium items-center justify-between"
+                  >
+                    {{ user.username ? user.username : user.phone }}
+                    <q-icon name="person"></q-icon>
                   </div>
                 </q-chip>
 
@@ -56,8 +58,8 @@
           </q-menu>
 
           <q-btn
-            v-if="user?.email"
-            :label="user.email"
+            v-if="user?.phone"
+            :label="user.phone"
             class="text-lowercase"
             icon="expand_more"
             flat
@@ -100,7 +102,7 @@ export default defineComponent({
     };
 
     const checkLoginAndRedirect = () => {
-      if (!user.value.email) router.push({ name: "login" });
+      if (!user.value.phone) router.push({ name: "login" });
       else return true;
     };
     return {

@@ -4,7 +4,7 @@ module.exports.up = async function (knex) {
     table.integer("center_id")
 
     // Auth
-    table.text("email").unique()
+    table.text("phone").unique()
     table.text("username").unique()
     table.text("password_hash")
     table.boolean("verified").defaultTo(false)
@@ -12,7 +12,7 @@ module.exports.up = async function (knex) {
     table.boolean("agreed").defaultTo(false)
 
     // General
-    table.text("phone")
+    table.text("email").unique()
     table.text("first_name")
     table.text("last_name")
     table.text("photo")

@@ -4,6 +4,7 @@ const errMessages = {
   noPersianPlease: "کاراکترهای فارسی مجاز نیستند",
   emptyFileds: "لطفاً قسمت‌های خالی را پر کنید",
   notValidEmail: "ایمیل معتبر نیست",
+  notValidPhone: "شماره موبایل معتبر نیست",
   noInput: "فیلدهای خالی را پر کنید",
   enterValidPass: "رمز عبور معتبر نیست",
   wrongPass: "رمز عبور اشتباه است",

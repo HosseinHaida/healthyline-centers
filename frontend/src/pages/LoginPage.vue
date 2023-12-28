@@ -36,7 +36,9 @@
               class=""
               color="primary"
               v-model="username"
-              :placeholder="which === 'login' ? 'ایمیل / نام کاربری' : 'ایمیل'"
+              :placeholder="
+                which === 'login' ? 'شماره موبایل / نام کاربری' : 'شماره موبایل'
+              "
             />
           </div>
         </div>
@@ -132,7 +134,6 @@ export default {
 
     const signinPending = computed(() => userStore.signinPending);
     const signupPending = computed(() => userStore.signupPending);
-    const signingIn = ref(false);
 
     const router = useRouter();
     const route = useRoute();
@@ -144,7 +145,7 @@ export default {
     const errMessage = ref("");
 
     const isThereEmptyFields = () => {
-      if (!username.value) errMessage.value = messages.pleaseEnterUsername;
+      if (!username.value) errMessage.value = messages.pleaseEnterPhone;
       else if (!pass.value) errMessage.value = messages.pleaseEnterPassword;
       else if (which.value === "signup" && !passConfirm.value)
         errMessage.value = messages.pleaseEnterPasswordConfirm;
@@ -153,8 +154,9 @@ export default {
         !username.value ||
         !pass.value ||
         (which.value === "signup" && !passConfirm.value)
-      )
+      ) {
         return true;
+      }
     };
 
     const onSignin = async () => {
@@ -172,7 +174,6 @@ export default {
             errMessage.value = message;
           } else if (status === "success") {
             notifPrimary(message, "login");
-            signingIn.value = true;
             router.push({ name: "index" });
           }
         });
@@ -185,7 +186,7 @@ export default {
 
       await userStore
         .signup({
-          email: username.value,
+          phone: username.value,
           password: pass.value,
           password_confirm: passConfirm.value,
         })
@@ -194,7 +195,6 @@ export default {
             errMessage.value = message;
           } else if (status === "success") {
             notifPrimary(message, "login");
-            signingIn.value = true;
             router.push({ name: "index" });
           }
         });
@@ -222,7 +222,6 @@ export default {
       isThereEmptyFields,
       signinPending,
       signupPending,
-      signingIn,
       onSignup,
       onSignin,
     };

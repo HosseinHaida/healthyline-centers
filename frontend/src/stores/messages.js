@@ -8,7 +8,7 @@ export const messages = {
   signedIn: "خوش آمدید",
   loggedOut: "خروج موفق",
   fieldRequired: "این فیلد اجباری است",
-  pleaseEnterUsername: "لطفا نام کاربری را وارد کنید",
+  pleaseEnterPhone: "لطفا نام کاربری یا شماره موبایل خود را وارد کنید",
   pleaseEnterPassword: "لطفا کلمه عبور را وارد کنید",
   pleaseEnterPasswordConfirm: "لطفا تکرار کلمه عبور را وارد کنید",
   centerInitialized: "مرکز با موفقیت ذخیره شد",
