@@ -92,7 +92,6 @@ export const useUserStore = defineStore("userAuth", {
               if (res.data && res.data.user) {
                 this.data = res.data.user;
                 this.t = t;
-                // const username = res.data.user.username;
                 return sendMessage("success", messages.fetchedMetaForUser);
               }
             },
