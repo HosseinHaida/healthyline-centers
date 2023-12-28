@@ -1,10 +1,6 @@
 <template>
   <q-page class="row items-center q-mx-lg">
     <q-form class="col-12">
-      <!-- <q-card-section class="row justify-center">
-        <q-icon color="primary" name="person_outline" size="80px" />
-      </q-card-section> -->
-
       <q-card-section class="q-pa-sm q-gutter-sm">
         <div class="row justify-center q-mb-lg">
           <div class="col-xs-12 col-sm-5">
