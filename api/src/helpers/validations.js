@@ -74,9 +74,9 @@ const isEmpty = (input) => {
     input === undefined ||
     input === "" ||
     input === null ||
-    input === "null"
+    input === "null" ||
+    input.length === 0
   ) {
-    console.log(input)
     return true
   } else {
     return false

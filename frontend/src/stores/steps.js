@@ -1,5 +1,5 @@
-export const preSignup = [
-  {
+export const progressRaw = {
+  initials: {
     step: 1,
     icon: "star",
     type: "center",
@@ -7,7 +7,7 @@ export const preSignup = [
     offset: 50,
     to: "/center/new",
   },
-  {
+  legals: {
     step: 2,
     icon: "star",
     type: "center",
@@ -15,14 +15,14 @@ export const preSignup = [
     offset: 100,
     to: "/legals/new",
   },
-  {
+  legals_approval: {
     step: 3,
     type: "hl",
     offset: -20,
     to: "/",
     tooltip: "تأیید اطلاعات حقوقی",
   },
-  {
+  certs: {
     step: 4,
     icon: "star",
     type: "center",
@@ -30,14 +30,14 @@ export const preSignup = [
     offset: 150,
     to: "/certs/new",
   },
-  {
+  certs_approval: {
     step: 5,
     type: "hl",
     offset: -20,
     to: "/",
     tooltip: "تأیید اطلاعات مجوزها",
   },
-  {
+  specialists: {
     step: 6,
     icon: "star",
     type: "center",
@@ -45,12 +45,12 @@ export const preSignup = [
     offset: 100,
     to: "/specialists/new",
   },
-  {
+  equipments: {
     step: 7,
     icon: "star",
     type: "center",
     label: "ثبت اطلاعات تجهیزات",
-    offset: 0,
+    offset: 50,
     to: "/equipments/new",
   },
-];
+};

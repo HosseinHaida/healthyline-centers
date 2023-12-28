@@ -1,9 +1,12 @@
-var express = require('express');
-var router = express.Router();
+const express = require("express")
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const verifyAuth = require("../src/middlewares/verifyAuth.js")
 
-module.exports = router;
+const { fetchProgress } = require("../src/components/index.js")
+
+const router = express.Router()
+
+// POST
+router.get("/progress", verifyAuth, fetchProgress)
+
+module.exports = router
