@@ -12,6 +12,7 @@ var centerInitialsRouter = require("./routes/centers/initials")
 var centerLegalsRouter = require("./routes/centers/legals")
 var centerCertsRouter = require("./routes/centers/certs")
 var centerSpecialistsRouter = require("./routes/centers/specialists")
+var centerEquipmentsRouter = require("./routes/centers/equipments")
 
 var app = express()
 
@@ -31,6 +32,7 @@ app.use("/api/centers/initials", centerInitialsRouter)
 app.use("/api/centers/legals", centerLegalsRouter)
 app.use("/api/centers/certs", centerCertsRouter)
 app.use("/api/centers/specialists", centerSpecialistsRouter)
+app.use("/api/centers/equipments", centerEquipmentsRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
