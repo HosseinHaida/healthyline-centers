@@ -12,13 +12,13 @@ export default defineComponent({
   name: "App",
   setup() {
     const router = useRouter();
-    const usersStore = useUserStore();
+    const userStore = useUserStore();
 
     onBeforeMount(async () => {
-      await usersStore.fetchUserData().then(({ status, message }) => {
+      await userStore.fetchUserData().then(({ status, message }) => {
         if (status === "error") {
           notifError(message, "warning");
-          usersStore.logout();
+          userStore.logout();
           router.push({ name: "login" });
         }
       });
