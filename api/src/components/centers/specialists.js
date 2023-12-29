@@ -1,25 +1,12 @@
 const db = require(".././../../db").Instance()
 const moment = require("moment")
 const multer = require("multer")
-// const fs = require("fs")
-// const sharp = require("sharp")
 const { catchError } = require("../../tools/catchError")
 
-const {
-  isEmpty,
-  // containsPersian,
-  isAllPersian,
-} = require("../../helpers/validations")
+const { isEmpty, isAllPersian } = require("../../helpers/validations")
 const { upload } = require("./upload.js")
 const { successMessage, status, error } = require("../../helpers/status")
 const { errMessages } = require("../../helpers/errMessages")
-// const {
-//   whereClause,
-//   arrayWhereClause,
-//   fetchThisUser,
-//   checkIfAdmin,
-// } = require("../../helpers/db")
-const { p2e } = require("../../helpers/strings")
 
 const addSpecialist = async (req, res) => {
   const { user_id } = req.user
