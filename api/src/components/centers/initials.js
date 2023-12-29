@@ -9,7 +9,7 @@ const {
   // containsPersian,
   // isAllPersian,
 } = require("../../helpers/validations")
-const { successMessage, status, error } = require("../../helpers/status")
+const { successMessage, status } = require("../../helpers/status")
 const { errMessages } = require("../../helpers/errMessages")
 // const {
 //   whereClause,
@@ -17,7 +17,6 @@ const { errMessages } = require("../../helpers/errMessages")
 //   fetchThisUser,
 //   checkIfAdmin,
 // } = require("../../helpers/db")
-const { p2e } = require("../../helpers/strings")
 
 const addCenter = async (req, res) => {
   const { user_id } = req.user
@@ -55,7 +54,7 @@ const addCenter = async (req, res) => {
     await db("center_initials").insert({
       registration_name: registrationName,
       brand_name: brandName,
-      gis,
+      gis: `${gis[0]},${gis[1]}`,
       postal_code: postalCode,
       exact_address: exactAddress,
       phone: phoneEntries,
@@ -70,4 +69,32 @@ const addCenter = async (req, res) => {
   }
 }
 
-module.exports = { addCenter }
+const fetchCenter = async (req, res) => {
+  const { user_id } = req.user
+
+  try {
+    const center = await db("center_initials")
+      .select("*")
+      .where({ created_by: user_id })
+      .first()
+
+    if (!center) return res.status(status.success).send()
+
+    const centerFormal = {
+      ...center,
+      registrationName: center.registration_name,
+      brandName: center.brand_name,
+      postalCode: center.postal_code,
+      exactAddress: center.exact_address,
+      gis: center.gis.split(","),
+      phoneEntries: center.phone,
+    }
+
+    successMessage.center = centerFormal
+    res.status(status.success).send(successMessage)
+  } catch (error) {
+    return catchError(errMessages.operationFailed, "error", res, error)
+  }
+}
+
+module.exports = { addCenter, fetchCenter }
