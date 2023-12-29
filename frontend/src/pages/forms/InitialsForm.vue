@@ -6,6 +6,7 @@
           filled
           v-model="formData.registrationName"
           label="نام ثبتی مرکز"
+          :readonly="isFormPrePopulated"
           lazy-rules
           :rules="[(val) => val && val.length > 0]"
         />
@@ -13,6 +14,7 @@
           filled
           v-model="formData.brandName"
           label="نام برند"
+          :readonly="isFormPrePopulated"
           lazy-rules
           :rules="[(val) => val && val.length > 0]"
         />
@@ -21,17 +23,20 @@
           class="q-mb-lg"
           filled
           v-model="formData.website"
+          :readonly="isFormPrePopulated"
           label="وبسایت"
           lazy-rules
         />
 
         <q-input
+          dir="ltr"
           v-for="(phone, i) in formData.phoneEntries"
           :key="i"
           label="شماره تلفن مرکز"
           filled
           v-model="formData.phoneEntries[i]"
           type="number"
+          :readonly="isFormPrePopulated"
           lazy-rules
           :rules="[(val) => val && val.length > 0]"
         >
@@ -43,6 +48,7 @@
                 flat
                 class="full-height"
                 @click="formData.phoneEntries.push('')"
+                :disable="isFormPrePopulated"
               />
               <q-btn
                 v-if="formData.phoneEntries.length > 1"
@@ -50,6 +56,7 @@
                 flat
                 class="full-height"
                 @click="formData.phoneEntries.splice(i, 1)"
+                :disable="isFormPrePopulated"
               />
             </div>
           </template>
@@ -62,6 +69,7 @@
           v-model="formData.postalCode"
           type="number"
           label="کد پستی"
+          :readonly="isFormPrePopulated"
           lazy-rules
           :rules="[(val) => val && val.length > 0]"
         />
@@ -69,6 +77,7 @@
           filled
           v-model="formData.exactAddress"
           label="نشانی دقیق"
+          :readonly="isFormPrePopulated"
           lazy-rules
           :rules="[(val) => val && val.length > 0]"
         />
@@ -96,6 +105,7 @@
       <div
         class="fixed-bottom q-pa-md row justify-end bg-slate"
         style="z-index: 400"
+        v-if="!isFormPrePopulated"
       >
         <q-btn
           label="ثبت مرکز"
@@ -122,11 +132,12 @@ import { catchError } from "src/stores/action-helpers";
 import { messages } from "src/stores/messages";
 import { useUserStore } from "src/stores/users-store";
 import { apiUrl } from "src/stores/variables";
-import { notifPrimary } from "src/util/notify";
+import { notifPrimary, notifError } from "src/util/notify";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 import L from "leaflet";
+import { useQuasar } from "quasar";
 
 const initialState = {
   registrationName: "",
@@ -140,22 +151,58 @@ const initialState = {
 
 export default {
   setup() {
+    const $q = useQuasar();
+
     const router = useRouter();
-    const usersStore = useUserStore();
+    const userStore = useUserStore();
 
     const map = ref();
     const mapMarker = ref();
     const mapContainer = ref();
+
+    const isFormPrePopulated = ref(false);
     const pending = ref(false);
     const formData = ref(initialState);
 
-    const onReset = () => (formData.value = initialState);
+    const tryFetchingCenter = async () => {
+      $q.loading.show();
+      await axios
+        .get(apiUrl + "/centers/initials", {
+          headers: { token: userStore.t },
+        })
+        .then(
+          (res) => {
+            $q.loading.hide();
+            if (res.data.center) {
+              isFormPrePopulated.value = true;
+              formData.value = res.data.center;
+              setMapMarker(res.data.center.gis[0], res.data.center.gis[1]);
+              map.value.setView(res.data.center.gis, 17);
+            }
+          },
+          (err) => {
+            $q.loading.hide();
+            return catchError(err);
+          }
+        );
+    };
 
+    const onReset = () => (formData.value = initialState);
     const onSubmit = async () => {
+      if (
+        !formData.value.registrationName ||
+        !formData.value.brandName ||
+        !formData.value.postalCode ||
+        !formData.value.exactAddress ||
+        formData.value.phoneEntries.length < 1 ||
+        (formData.value.gis[0] === 0 && formData.value.gis[1] === 0)
+      )
+        return notifError(messages.emptyFields, "warning");
+
       pending.value = true;
       await axios
         .post(apiUrl + "/centers/initials/new", formData.value, {
-          headers: { token: usersStore.t },
+          headers: { token: userStore.t },
         })
         .then(
           (res) => {
@@ -173,9 +220,9 @@ export default {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition((pos) => {
           formData.value.gis = [pos.coords.latitude, pos.coords.longitude];
-          map.value.setView(formData.value.gis, 13);
+          map.value.setView(formData.value.gis, 18);
         });
-      }
+      } else notifPrimary(messages.geolocationNotSupported, "circle");
     };
 
     const setMapMarker = (lat, lng) => {
@@ -192,14 +239,19 @@ export default {
       }).addTo(map.value);
       mapMarker.value = L.marker([0, 0]).addTo(map.value);
       map.value.on("click", (e) => setMapMarker(e.latlng.lat, e.latlng.lng));
+
+      tryFetchingCenter();
     });
 
     return {
       map,
       mapContainer,
+
+      isFormPrePopulated,
       pending,
       formData,
 
+      tryFetchingCenter,
       onReset,
       onSubmit,
       getCurrentLocation,

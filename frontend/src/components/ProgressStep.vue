@@ -12,9 +12,15 @@
       />
       <q-icon
         v-if="step.type === 'hl'"
-        :name="step.complete ? 'done_all' : step.isNext ? 'schedule' : ''"
+        :name="
+          step.complete
+            ? 'done_all'
+            : step.isNext || step.count < step.totalCount
+            ? 'schedule'
+            : ''
+        "
         size="sm"
-        color="primary"
+        :color="step.count < step.totalCount ? 'grey' : 'primary'"
         class="q-mr-sm"
       />
       <q-btn

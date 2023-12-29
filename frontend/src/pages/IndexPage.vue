@@ -22,7 +22,7 @@
         </q-card>
 
         <div class="column q-pt-md">
-          <div class="q-mb-sm" v-for="(step, i) in progress" :key="i">
+          <div class="q-mb-xs" v-for="(step, i) in progress" :key="i">
             <ProgressStep :step="step" />
           </div>
         </div>
@@ -40,21 +40,25 @@ import { apiUrl } from "src/stores/variables";
 import { useUserStore } from "src/stores/users-store";
 import { catchError } from "src/stores/action-helpers";
 import ProgressStep from "src/components/ProgressStep.vue";
+import { useQuasar } from "quasar";
 
 export default defineComponent({
   name: "IndexPage",
   components: { ProgressStep },
   setup() {
-    const usersStore = useUserStore();
+    const $q = useQuasar();
+    const userStore = useUserStore();
 
-    const progress = ref(progressRaw);
-    const pending = ref(false);
+    const progress = ref({});
 
     onMounted(() => {
-      pending.value = true;
+      Object.entries(progressRaw).forEach(([k, v]) => {
+        progress.value[k] = { ...progress.value[k], ...v };
+      });
+      $q.loading.show();
       axios
         .get(apiUrl + "/main/progress", {
-          headers: { token: usersStore.t },
+          headers: { token: userStore.t },
         })
         .then(
           (res) => {
@@ -64,9 +68,12 @@ export default defineComponent({
                 progress.value[k] = { ...progress.value[k], ...v };
               });
             }
-            pending.value = false;
+            $q.loading.hide();
           },
-          (error) => catchError(error)
+          (error) => {
+            $q.loading.hide();
+            catchError(error);
+          }
         );
     });
     return {

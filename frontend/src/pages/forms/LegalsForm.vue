@@ -6,6 +6,7 @@
           filled
           v-model="formData.firstName"
           label="نام"
+          :readonly="isFormPrePopulated"
           lazy-rules
           :rules="[(val) => val && val.length > 0]"
         />
@@ -13,22 +14,24 @@
           filled
           v-model="formData.lastName"
           label="نام خانوادگی"
+          :readonly="isFormPrePopulated"
           lazy-rules
           :rules="[(val) => val && val.length > 0]"
         />
-        <q-input
+        <q-select
           class="q-mb-lg"
           filled
           v-model="formData.gender"
+          :options="['مرد', 'زن', 'غیره']"
           label="جنسیت"
-          lazy-rules
+          :readonly="isFormPrePopulated"
         />
         <q-input
           class="q-mb-lg"
           filled
           v-model="formData.rank"
           label="سمت (وضعیت)"
-          lazy-rules
+          :readonly="isFormPrePopulated"
         />
         <q-input
           dir="ltr"
@@ -36,14 +39,18 @@
           filled
           v-model="formData.phone"
           label="شماره موبایل"
-          lazy-rules
+          :readonly="isFormPrePopulated"
         />
       </div>
 
       <div class="q-px-md col-xs-12 col-md-6">
         <div class="row">
           <div class="col-xs-12 col-md-6 q-pr-md">
-            <ImagePicker
+            <q-img v-if="isFormPrePopulated" :src="fetchedPhotoUrl">
+              <q-badge>عکس پروفایل</q-badge>
+            </q-img>
+            <FilePicker
+              v-else
               @on-file-selected="formData.photo = $event"
               icon="person_outline"
               label="انتخاب عکس"
@@ -51,7 +58,11 @@
           </div>
 
           <div class="col-xs-12 col-md-6 q-pl-md">
-            <ImagePicker
+            <q-img v-if="isFormPrePopulated" :src="fetchedCertPhotoUrl">
+              <q-badge>تصویر مجوز</q-badge>
+            </q-img>
+            <FilePicker
+              v-else
               @on-file-selected="formData.certPhoto = $event"
               icon="badge"
               label="انتخاب تصویر مجوز"
@@ -60,16 +71,20 @@
         </div>
       </div>
 
-      <div class="fixed-bottom q-pa-md row justify-between bg-slate">
+      <div
+        class="fixed-bottom q-pa-md row justify-between q-gutter-sm bg-slate"
+      >
         <q-btn
-          label="نمایش تاریخچه"
+          label="لیست اطلاعات ثبت شده"
           type="submit"
           color="primary"
           icon="history"
+          flat
           outline
           :loading="pending"
+          to="/legals"
         />
-        <div>
+        <div v-if="!isFormPrePopulated">
           <q-btn
             label="ثبت اطلاعات حقوقی"
             type="submit"
@@ -98,8 +113,10 @@ import { useUserStore } from "src/stores/users-store";
 import { apiUrl } from "src/stores/variables";
 import { notifError, notifPrimary } from "src/util/notify";
 import { ref } from "vue";
-import { useRouter } from "vue-router";
-import ImagePicker from "src/components/ImagePicker.vue";
+import { useRouter, useRoute } from "vue-router";
+import FilePicker from "src/components/FilePicker.vue";
+import { useQuasar } from "quasar";
+import { watch } from "vue";
 
 const initialState = {
   firstName: "",
@@ -112,13 +129,20 @@ const initialState = {
 };
 
 export default {
-  components: { ImagePicker },
+  components: { FilePicker },
   setup() {
-    const router = useRouter();
-    const usersStore = useUserStore();
+    const $q = useQuasar();
 
+    const router = useRouter();
+    const route = useRoute();
+    const userStore = useUserStore();
+
+    const isFormPrePopulated = ref(false);
     const pending = ref(false);
     const formData = ref(initialState);
+
+    const fetchedPhotoUrl = ref("");
+    const fetchedCertPhotoUrl = ref("");
 
     const onReset = () => (formData.value = initialState);
 
@@ -142,12 +166,13 @@ export default {
       pending.value = true;
       await axios
         .post(apiUrl + "/centers/legals/new", standardFormData, {
-          headers: { token: usersStore.t },
+          headers: { token: userStore.t },
         })
         .then(
           (res) => {
             notifPrimary(messages.legalsAdded, "done");
             router.push({ name: "index" });
+            onReset();
           },
           (error) => {
             pending.value = false;
@@ -155,9 +180,59 @@ export default {
           }
         );
     };
+
+    const fetchItem = async (id) => {
+      $q.loading.show();
+      await axios
+        .get(apiUrl + `/centers/legals/${id}`, {
+          headers: { token: userStore.t },
+        })
+        .then(
+          (res) => {
+            $q.loading.hide();
+            if (res.data.item) {
+              formData.value = res.data.item;
+              // Create Photo URL
+              let decodedPhoto = atob(res.data.item.photoBase64);
+              let photoBlob = new Blob([decodedPhoto], {
+                type: res.data.item.photoType,
+              });
+              let photoUrl = URL.createObjectURL(photoBlob);
+              fetchedPhotoUrl.value = photoUrl;
+              // Create Cert Photo URL
+              let decodedCertPhoto = atob(res.data.item.certPhotoBase64);
+              let certPhotoBlob = new Blob([decodedCertPhoto], {
+                type: res.data.item.certPhotoType,
+              });
+              let certPhotoUrl = URL.createObjectURL(certPhotoBlob);
+              fetchedCertPhotoUrl.value = certPhotoUrl;
+            }
+          },
+          (err) => {
+            $q.loading.hide();
+            return catchError(err);
+          }
+        );
+    };
+
+    watch(
+      route,
+      async () => {
+        if (route.params.id) {
+          isFormPrePopulated.value = true;
+          fetchItem(route.params.id);
+        }
+      },
+      { immediate: true }
+    );
+
     return {
+      isFormPrePopulated,
       pending,
       formData,
+
+      fetchedPhotoUrl,
+      fetchedCertPhotoUrl,
 
       onReset,
       onSubmit,

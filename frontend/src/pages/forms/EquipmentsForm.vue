@@ -25,23 +25,23 @@
           filled
           v-model="formData.usage"
           label="کاربری"
-          lazy-rules
         />
       </div>
 
       <div class="q-px-md col-xs-12 col-md-6">
         <div class="row">
           <div class="col-xs-12 col-md-6 q-pr-md">
-            <ImagePicker
-              v-model="formData.personImg"
+            <FilePicker
+              @on-file-selected="formData.catalog = $event"
               icon="person_outline"
               label="انتخاب کاتالوگ دستگاه"
+              accepted-types=".jpg, .pdf, image/*"
             />
           </div>
 
           <div class="col-xs-12 col-md-6 q-pl-md">
-            <ImagePicker
-              v-model="formData.certImg"
+            <FilePicker
+              @on-file-selected="formData.photo = $event"
               icon="text_snippet"
               label="انتخاب عکس محیطی"
             />
@@ -88,46 +88,34 @@ import { apiUrl } from "src/stores/variables";
 import { notifError, notifPrimary } from "src/util/notify";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import ImagePicker from "src/components/ImagePicker.vue";
+import FilePicker from "src/components/FilePicker.vue";
+
+const initialState = {
+  name: "",
+  brand: "",
+  usage: "",
+  catalog: null,
+  photo: null,
+};
 
 export default {
-  components: { ImagePicker },
+  components: { FilePicker },
   setup() {
     const router = useRouter();
-    const usersStore = useUserStore();
+    const userStore = useUserStore();
 
     const pending = ref(false);
-    const formData = ref({
-      firstName: "",
-      lastName: "",
-      rank: "",
-      gender: null,
-      phone: "",
-      personImg: null,
-      certImg: null,
-    });
+    const formData = ref(initialState);
 
-    const onReset = () => {
-      formData.value = {
-        firstName: "",
-        lastName: "",
-        rank: "",
-        gender: null,
-        phone: "",
-        personImg: null,
-        certImg: null,
-      };
-    };
+    const onReset = () => (formData.value = initialState);
 
     const onSubmit = async () => {
       if (
-        !formData.value.firstName ||
-        !formData.value.lastName ||
-        !formData.value.rank ||
-        !formData.value.gender ||
-        !formData.value.phone ||
-        !formData.value.personImg ||
-        !formData.value.certImg
+        !formData.value.name ||
+        !formData.value.brand ||
+        !formData.value.usage ||
+        !formData.value.catalog ||
+        !formData.value.photo
       )
         return notifError(messages.emptyFields, "warning");
 
@@ -138,12 +126,12 @@ export default {
 
       pending.value = true;
       await axios
-        .post(apiUrl + "/centers/legals/new", standardFormData, {
-          headers: { token: usersStore.t },
+        .post(apiUrl + "/centers/equipments/new", standardFormData, {
+          headers: { token: userStore.t },
         })
         .then(
           (res) => {
-            notifPrimary(messages.centerInitialized, "done");
+            notifPrimary(messages.equipmentAdded, "done");
             router.push({ name: "index" });
           },
           (error) => {

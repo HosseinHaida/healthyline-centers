@@ -35,9 +35,9 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   Router.beforeEach((to, from, next) => {
-    const usersStore = useUserStore();
-    if (to.name !== "login" && !usersStore.t) next({ name: "login" });
-    else if (to.name === "login" && usersStore.t) next({ name: "index" });
+    const userStore = useUserStore();
+    if (to.name !== "login" && !userStore.t) next({ name: "login" });
+    else if (to.name === "login" && userStore.t) next({ name: "index" });
     else next();
   });
 

@@ -12,9 +12,11 @@
       icon="clear"
       color="primary"
       @click.stop="onClear"
-      v-if="localImgSrc"
+      v-if="selectedFile"
     />
-    <span v-if="!localImgSrc"> {{ label }}</span>
+    <span class="text-center" v-if="!localImgSrc">
+      {{ label }} {{ selectedFile ? `(${selectedFile.name})` : "" }}
+    </span>
     <q-img
       v-if="localImgSrc"
       :src="localImgSrc"
@@ -33,9 +35,9 @@
       :ref="(el) => (pickerRef = el)"
       class="hidden"
       filled
-      accept=".jpg, image/*"
+      :accept="acceptedTypes"
       @rejected="onImgRejected"
-      @update:model-value="onInputChange"
+      @update:model-value="onFileSelected"
     />
   </div>
 </template>
@@ -45,7 +47,11 @@ import { messages } from "src/stores/messages";
 import { notifError } from "src/util/notify";
 import { ref } from "vue";
 
-defineProps(["icon", "label"]);
+const props = defineProps({
+  icon: { default: "file" },
+  label: { default: "انتخاب فایل" },
+  acceptedTypes: { default: ".jpg, image/*" },
+});
 const emit = defineEmits(["onFileSelected"]);
 
 const model = ref(null);
@@ -61,9 +67,11 @@ const onImgRejected = () => {
   notifError(messages.notAnImage);
 };
 
-const onInputChange = (file) => {
-  localImgSrc.value = URL.createObjectURL(file);
-  URL.revokeObjectURL(file);
+const onFileSelected = (file) => {
+  if (props["acceptedTypes"] === ".jpg, image/*") {
+    localImgSrc.value = URL.createObjectURL(file);
+    URL.revokeObjectURL(file);
+  }
 
   selectedFile.value = file;
   emit("onFileSelected", file);
@@ -71,7 +79,8 @@ const onInputChange = (file) => {
 
 const onClear = () => {
   localImgSrc.value = null;
-  emit("update:modelValue", null);
+  selectedFile.value = null;
+  emit("onFileSelected", null);
 };
 </script>
 

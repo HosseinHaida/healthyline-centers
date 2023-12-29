@@ -19,6 +19,16 @@ const routes = [
         component: () => import("pages/forms/InitialsForm.vue"),
       },
       {
+        path: "legals",
+        name: "legals",
+        component: () => import("pages/lists/LegalsList.vue"),
+      },
+      {
+        path: "legals/:id",
+        name: "legalsShow",
+        component: () => import("pages/forms/LegalsForm.vue"),
+      },
+      {
         path: "legals/new",
         name: "legalsNew",
         component: () => import("pages/forms/LegalsForm.vue"),

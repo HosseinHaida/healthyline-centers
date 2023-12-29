@@ -16,34 +16,31 @@
           lazy-rules
           :rules="[(val) => val && val.length > 0]"
         />
-        <q-input
+        <q-select
           class="q-mb-lg"
           filled
           v-model="formData.gender"
+          :options="['مرد', 'زن', 'غیره']"
           label="جنسیت"
-          lazy-rules
         />
         <q-input
           class="q-mb-lg"
           filled
           v-model="formData.rank"
           label="رده کارشناسی"
-          lazy-rules
         />
         <q-input
-          dir="ltr"
           class="q-mb-lg"
           filled
           v-model="formData.experience"
           label="تجربه کاری"
-          lazy-rules
         />
       </div>
 
       <div class="q-px-md col-xs-12 col-md-6">
         <div class="row">
           <div class="col-xs-12 col-md-6 q-pr-md">
-            <ImagePicker
+            <FilePicker
               @on-file-selected="formData.photo = $event"
               icon="person_outline"
               label="انتخاب عکس"
@@ -51,10 +48,11 @@
           </div>
 
           <div class="col-xs-12 col-md-6 q-pl-md">
-            <ImagePicker
+            <FilePicker
               @on-file-selected="formData.resume = $event"
               icon="text_snippet"
               label="انتخاب رزومه فنی"
+              accepted-types=".jpg, .pdf, image/*"
             />
           </div>
         </div>
@@ -99,7 +97,7 @@ import { apiUrl } from "src/stores/variables";
 import { notifError, notifPrimary } from "src/util/notify";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import ImagePicker from "src/components/ImagePicker.vue";
+import FilePicker from "src/components/FilePicker.vue";
 
 const initialState = {
   firstName: "",
@@ -112,10 +110,10 @@ const initialState = {
 };
 
 export default {
-  components: { ImagePicker },
+  components: { FilePicker },
   setup() {
     const router = useRouter();
-    const usersStore = useUserStore();
+    const userStore = useUserStore();
 
     const pending = ref(false);
     const formData = ref(initialState);
@@ -142,7 +140,7 @@ export default {
       pending.value = true;
       await axios
         .post(apiUrl + "/centers/specialists/new", standardFormData, {
-          headers: { token: usersStore.t },
+          headers: { token: userStore.t },
         })
         .then(
           (res) => {

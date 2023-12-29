@@ -22,7 +22,7 @@
       </div>
 
       <div class="q-px-md col-xs-12 col-md-6">
-        <ImagePicker
+        <FilePicker
           @on-file-selected="formData.photo = $event"
           icon="card_membership"
           label="انتخاب تصویر مجوز"
@@ -78,13 +78,13 @@ import { apiUrl } from "src/stores/variables";
 import { notifError, notifPrimary } from "src/util/notify";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
-import ImagePicker from "src/components/ImagePicker.vue";
+import FilePicker from "src/components/FilePicker.vue";
 
 export default {
-  components: { ImagePicker },
+  components: { FilePicker },
   setup() {
     const router = useRouter();
-    const usersStore = useUserStore();
+    const userStore = useUserStore();
 
     const pending = ref(false);
     const formData = ref({
@@ -120,7 +120,7 @@ export default {
       pending.value = true;
       await axios
         .post(apiUrl + "/centers/certs/new", standardFormData, {
-          headers: { token: usersStore.t },
+          headers: { token: userStore.t },
         })
         .then(
           (res) => {
