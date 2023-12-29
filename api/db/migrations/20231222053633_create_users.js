@@ -2,7 +2,6 @@ module.exports.up = async function (knex) {
   await knex.schema.createTable("users", (table) => {
     table.increments("id")
     table.integer("center_id")
-
     // Auth
     table.text("phone").unique()
     table.text("username").unique()
@@ -10,14 +9,12 @@ module.exports.up = async function (knex) {
     table.boolean("verified").defaultTo(false)
     table.boolean("is_admin").defaultTo(false)
     table.boolean("agreed").defaultTo(false)
-
     // General
     table.text("email").unique()
     table.text("first_name")
     table.text("last_name")
     table.text("photo")
     table.text("city")
-
     // Meta
     table.integer("created_by")
     table.integer("updated_by")
