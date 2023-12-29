@@ -1,25 +1,18 @@
 const db = require(".././../../db").Instance()
 const moment = require("moment")
 const multer = require("multer")
-// const fs = require("fs")
-// const sharp = require("sharp")
 const { catchError } = require("../../tools/catchError")
-
+const fs = require("fs")
 const {
   isEmpty,
-  // containsPersian,
   isAllPersian,
+  isValidPhone,
 } = require("../../helpers/validations")
 const { upload } = require("./upload.js")
-const { successMessage, status, error } = require("../../helpers/status")
+const { successMessage, status } = require("../../helpers/status")
 const { errMessages } = require("../../helpers/errMessages")
-// const {
-//   whereClause,
-//   arrayWhereClause,
-//   fetchThisUser,
-//   checkIfAdmin,
-// } = require("../../helpers/db")
-const { p2e } = require("../../helpers/strings")
+const { checkIfAdmin } = require("../../helpers/db.js")
+const { blobType } = require("../../helpers/blobTypes.js")
 
 const addLegals = async (req, res) => {
   const { user_id } = req.user
@@ -56,6 +49,9 @@ const addLegals = async (req, res) => {
     )
       return catchError(errMessages.emptyFileds, "bad", res)
 
+    if (!isValidPhone(phone))
+      return catchError(errMessages.notValidPhone, "bad", res)
+
     if (!isAllPersian(first_name) || !isAllPersian(last_name))
       return catchError(errMessages.onlyPersianForName, "bad", res)
 
@@ -84,11 +80,84 @@ const addLegals = async (req, res) => {
         created_at,
       })
 
-      return res.status(status.success).send(successMessage)
+      return res.status(status.success).send()
     } catch (error) {
       return catchError(errMessages.operationFailed, "error", res, error)
     }
   })
 }
 
-module.exports = { addLegals }
+const fetchList = async (req, res) => {
+  const { user_id } = req.user
+
+  try {
+    const list = await db("center_legals")
+      .select(
+        "first_name as firstName",
+        "last_name as lastName",
+        "id",
+        "rank",
+        "gender",
+        "phone",
+        "created_at",
+        "created_by",
+        "center_id"
+      )
+      .where({ created_by: user_id })
+
+    successMessage.list = list
+    res.status(status.success).send(successMessage)
+  } catch (error) {
+    return catchError(errMessages.operationFailed, "error", res, error)
+  }
+}
+
+const fetchItem = async (req, res) => {
+  const { user_id } = req.user
+  const { id } = req.params
+
+  try {
+    const item = await db("center_legals")
+      .select(
+        "first_name as firstName",
+        "last_name as lastName",
+        "id",
+        "rank",
+        "gender",
+        "phone",
+        "photo",
+        "cert_photo as certPhoto",
+        "created_at",
+        "created_by",
+        "center_id"
+      )
+      .where({ id })
+      .first()
+
+    const isAdmin = checkIfAdmin(user_id, res)
+    if (!isAdmin && item.created_by !== user_id)
+      return catchError(errMessages.notAuthorized, "bad", res, error)
+
+    const pathToPhoto = `${process.env.UPLOAD_DIR_CENTERS}${user_id}/${item.photo}`
+    const pathToCertPhoto = `${process.env.UPLOAD_DIR_CENTERS}${user_id}/${item.certPhoto}`
+
+    const photo = fs.readFileSync(pathToPhoto)
+    const certPhoto = fs.readFileSync(pathToCertPhoto)
+
+    successMessage.item = {
+      ...item,
+      photoBase64: Buffer.from(photo).toString("base64"),
+      photoType:
+        blobType[item.photo.substring(item.photo.lastIndexOf(".") + 1)],
+      certPhotoBase64: Buffer.from(certPhoto).toString("base64"),
+      certPhotoType:
+        blobType[item.certPhoto.substring(item.certPhoto.lastIndexOf(".") + 1)],
+    }
+
+    res.status(status.success).send(successMessage)
+  } catch (error) {
+    return catchError(errMessages.operationFailed, "error", res, error)
+  }
+}
+
+module.exports = { addLegals, fetchList, fetchItem }
