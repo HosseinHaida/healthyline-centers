@@ -44,11 +44,13 @@
       </div>
 
       <div class="q-px-md col-xs-12 col-md-6">
-        <div class="row">
+        <div class="row items-center">
           <div class="col-xs-12 col-md-6 q-pr-md">
-            <q-img v-if="isFormPrePopulated" :src="fetchedPhotoUrl">
-              <q-badge>عکس پروفایل</q-badge>
-            </q-img>
+            <div style="height: 23rem" v-if="isFormPrePopulated">
+              <q-badge class="q-px-sm q-py-xs">عکس پروفایل</q-badge>
+              <q-img :src="fetchedPhotoUrl" />
+            </div>
+
             <FilePicker
               v-else
               @on-file-selected="formData.photo = $event"
@@ -56,11 +58,11 @@
               label="انتخاب عکس"
             />
           </div>
-
           <div class="col-xs-12 col-md-6 q-pl-md">
-            <q-img v-if="isFormPrePopulated" :src="fetchedCertPhotoUrl">
-              <q-badge>تصویر مجوز</q-badge>
-            </q-img>
+            <div style="height: 23rem" v-if="isFormPrePopulated">
+              <q-badge class="q-px-sm q-py-xs">تصویر مجوز</q-badge>
+              <q-img :src="fetchedCertPhotoUrl" />
+            </div>
             <FilePicker
               v-else
               @on-file-selected="formData.certPhoto = $event"
@@ -192,20 +194,8 @@ export default {
             $q.loading.hide();
             if (res.data.item) {
               formData.value = res.data.item;
-              // Create Photo URL
-              let decodedPhoto = atob(res.data.item.photoBase64);
-              let photoBlob = new Blob([decodedPhoto], {
-                type: res.data.item.photoType,
-              });
-              let photoUrl = URL.createObjectURL(photoBlob);
-              fetchedPhotoUrl.value = photoUrl;
-              // Create Cert Photo URL
-              let decodedCertPhoto = atob(res.data.item.certPhotoBase64);
-              let certPhotoBlob = new Blob([decodedCertPhoto], {
-                type: res.data.item.certPhotoType,
-              });
-              let certPhotoUrl = URL.createObjectURL(certPhotoBlob);
-              fetchedCertPhotoUrl.value = certPhotoUrl;
+              fetchedPhotoUrl.value = `data:${res.data.item.photoType};base64,${res.data.item.photoBase64}`;
+              fetchedCertPhotoUrl.value = `data:${res.data.item.certPhotoType};base64,${res.data.item.certPhotoBase64}`;
             }
           },
           (err) => {
