@@ -1,74 +1,116 @@
 <template>
-  <q-page class="q-px-sm q-pt-lg q-pb-xl">
-    <q-form @submit="onSubmit" @reset="onReset" class="row">
-      <div class="q-px-md col-xs-12 col-sm-6">
-        <q-input
-          filled
-          v-model="formData.firstName"
-          label="نام"
-          :readonly="isFormPrePopulated"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        />
-        <q-input
-          filled
-          v-model="formData.lastName"
-          label="نام خانوادگی"
-          :readonly="isFormPrePopulated"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        />
-        <q-select
-          class="q-mb-lg"
-          filled
-          v-model="formData.gender"
-          :options="['مرد', 'زن', 'غیره']"
-          label="جنسیت"
-          :readonly="isFormPrePopulated"
-        />
-        <q-input
-          class="q-mb-lg"
-          filled
-          v-model="formData.rank"
-          label="سمت (وضعیت)"
-          :readonly="isFormPrePopulated"
-        />
-        <q-input
-          dir="ltr"
-          class="q-mb-lg"
-          filled
-          v-model="formData.phone"
-          label="شماره موبایل"
-          :readonly="isFormPrePopulated"
-        />
+  <q-page class="q-px-sm q-pt-lg" style="padding-bottom: 8rem">
+    <q-form @submit="onSubmit" @reset="onReset" class="row q-pt-lg">
+      <div class="col-12 q-mb-md">
+        <div class="row items-center">
+          <div class="text-h5 text-grey-8 q-pl-lg">
+            <span v-if="!isFormPrePopulated">ثبت</span>
+            اطلاعات حقوقی
+          </div>
+        </div>
       </div>
 
-      <div class="q-px-md col-xs-12 col-md-6">
+      <div class="col-12">
         <div class="row items-center">
-          <div class="col-xs-12 col-md-6 q-pr-md">
-            <div style="height: 23rem" v-if="isFormPrePopulated">
-              <q-badge class="q-px-sm q-py-xs">عکس پروفایل</q-badge>
-              <q-img :src="fetchedPhotoUrl" />
-            </div>
+          <div class="col-4 bg-grey-4" style="height: 2px"></div>
+        </div>
+      </div>
 
-            <FilePicker
-              v-else
-              @on-file-selected="formData.photo = $event"
-              icon="person_outline"
-              label="انتخاب عکس"
-            />
-          </div>
-          <div class="col-xs-12 col-md-6 q-pl-md">
-            <div style="height: 23rem" v-if="isFormPrePopulated">
-              <q-badge class="q-px-sm q-py-xs">تصویر مجوز</q-badge>
-              <q-img :src="fetchedCertPhotoUrl" />
+      <div class="col-xs-12 col-md-7 q-px-md q-mx-auto q-mb-md q-mt-md">
+        <div class="text-h6 text-grey-5">کلی</div>
+        <div class="text-caption text-grey-5 q-mb-md">نام و نشان</div>
+        <div class="col-xs-12">
+          <q-input
+            filled
+            v-model="formData.firstName"
+            label="نام"
+            :readonly="isFormPrePopulated"
+            lazy-rules
+            :rules="[(val) => val && val.length > 0]"
+          />
+          <q-input
+            filled
+            v-model="formData.lastName"
+            label="نام خانوادگی"
+            :readonly="isFormPrePopulated"
+            lazy-rules
+            :rules="[(val) => val && val.length > 0]"
+          />
+          <q-select
+            class="q-mb-lg"
+            filled
+            v-model="formData.gender"
+            :options="['مرد', 'زن', 'غیره']"
+            label="جنسیت"
+            :readonly="isFormPrePopulated"
+          />
+          <q-input
+            class="q-mb-lg q-mt-xl"
+            filled
+            v-model="formData.rank"
+            label="سمت (وضعیت)"
+            hint="مدیر ..."
+            :readonly="isFormPrePopulated"
+          />
+          <q-input
+            dir="ltr"
+            class="q-mb-lg q-mt-xl"
+            filled
+            v-model="formData.phone"
+            label="شماره موبایل"
+            hint="0913xxxxxxx"
+            :readonly="isFormPrePopulated"
+          />
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row items-center">
+          <div class="col-4 bg-grey-4" style="height: 2px"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-md-7 q-px-md q-mx-auto q-mb-md q-mt-md">
+        <div class="text-h6 text-grey-5">احراز هویت</div>
+        <div class="text-caption text-grey-5 q-mb-md">
+          <span v-if="!isFormPrePopulated"> بارگزاری </span>
+          عکس پروفایل و تصویر مجوز
+        </div>
+        <div class="col-xs-12">
+          <div class="row items-center">
+            <div class="col-xs-12 col-md-6 q-pr-md">
+              <div style="height: 23rem" v-if="isFormPrePopulated">
+                <q-badge class="q-px-sm q-py-xs">عکس پروفایل</q-badge>
+                <q-img
+                  fit="contain"
+                  style="max-height: 23rem; width: 23rem"
+                  :src="fetchedPhotoUrl"
+                />
+              </div>
+
+              <FilePicker
+                v-else
+                @on-file-selected="formData.photo = $event"
+                icon="person_outline"
+                label="انتخاب عکس"
+              />
             </div>
-            <FilePicker
-              v-else
-              @on-file-selected="formData.certPhoto = $event"
-              icon="badge"
-              label="انتخاب تصویر مجوز"
-            />
+            <div class="col-xs-12 col-md-6 q-pl-md">
+              <div style="height: 23rem" v-if="isFormPrePopulated">
+                <q-badge class="q-px-sm q-py-xs">تصویر مجوز</q-badge>
+                <q-img
+                  fit="contain"
+                  style="max-height: 23rem; width: 23rem"
+                  :src="fetchedCertPhotoUrl"
+                />
+              </div>
+              <FilePicker
+                v-else
+                @on-file-selected="formData.certPhoto = $event"
+                icon="badge"
+                label="انتخاب تصویر مجوز"
+              />
+            </div>
           </div>
         </div>
       </div>

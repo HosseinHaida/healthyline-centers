@@ -1,86 +1,117 @@
 <template>
   <q-page class="q-px-sm q-pt-lg" style="padding-bottom: 100px">
-    <q-form @submit="onSubmit" @reset="onReset" class="row">
-      <div class="q-px-md col-xs-12 col-md-6">
-        <q-input
-          filled
-          v-model="formData.registrationName"
-          label="نام ثبتی مرکز"
-          :readonly="isFormPrePopulated"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        />
-        <q-input
-          filled
-          v-model="formData.brandName"
-          label="نام برند"
-          :readonly="isFormPrePopulated"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        />
-        <q-input
-          dir="ltr"
-          class="q-mb-lg"
-          filled
-          v-model="formData.website"
-          :readonly="isFormPrePopulated"
-          label="وبسایت"
-          lazy-rules
-        />
-
-        <q-input
-          dir="ltr"
-          v-for="(phone, i) in formData.phoneEntries"
-          :key="i"
-          label="شماره تلفن مرکز"
-          filled
-          v-model="formData.phoneEntries[i]"
-          type="number"
-          :readonly="isFormPrePopulated"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        >
-          <template v-slot:after>
-            <div class="full-height">
-              <q-btn
-                v-if="i === formData.phoneEntries.length - 1"
-                icon="add"
-                flat
-                class="full-height"
-                @click="formData.phoneEntries.push('')"
-                :disable="isFormPrePopulated"
-              />
-              <q-btn
-                v-if="formData.phoneEntries.length > 1"
-                icon="remove"
-                flat
-                class="full-height"
-                @click="formData.phoneEntries.splice(i, 1)"
-                :disable="isFormPrePopulated"
-              />
-            </div>
-          </template>
-        </q-input>
+    <q-form @submit="onSubmit" @reset="onReset" class="row q-pt-lg">
+      <div class="col-12 q-mb-md">
+        <div class="row items-center">
+          <div class="text-h5 text-grey-8 q-pl-lg">
+            <span v-if="!isFormPrePopulated">ثبت</span>
+            اطلاعات مرکز
+          </div>
+        </div>
       </div>
 
-      <div class="q-px-md col-xs-12 col-md-6">
-        <q-input
-          filled
-          v-model="formData.postalCode"
-          type="number"
-          label="کد پستی"
-          :readonly="isFormPrePopulated"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        />
-        <q-input
-          filled
-          v-model="formData.exactAddress"
-          label="نشانی دقیق"
-          :readonly="isFormPrePopulated"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        />
+      <div class="col-12">
+        <div class="row items-center">
+          <div class="col-4 bg-grey-4" style="height: 2px"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-md-7 q-px-md q-mx-auto q-mb-md q-mt-md">
+        <div class="text-h6 text-grey-5">کلی</div>
+        <div class="text-caption text-grey-5 q-mb-md">نام و نشان</div>
+        <div class="col-xs-12">
+          <q-input
+            filled
+            v-model="formData.registrationName"
+            label="نام ثبتی مرکز"
+            :readonly="isFormPrePopulated"
+            lazy-rules
+            :rules="[(val) => val && val.length > 0]"
+          />
+          <q-input
+            filled
+            v-model="formData.brandName"
+            label="نام برند"
+            :readonly="isFormPrePopulated"
+            lazy-rules
+            :rules="[(val) => val && val.length > 0]"
+          />
+          <q-input
+            dir="ltr"
+            class="q-mb-lg"
+            filled
+            v-model="formData.website"
+            :readonly="isFormPrePopulated"
+            label="وبسایت"
+            lazy-rules
+          />
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="row items-center">
+          <div class="col-4 bg-grey-4" style="height: 2px"></div>
+        </div>
+      </div>
+
+      <div class="col-xs-12 col-md-7 q-px-md q-mx-auto q-mt-md">
+        <div class="col-xs-12">
+          <div class="text-h6 text-grey-5">تماس</div>
+          <div class="text-caption text-grey-5 q-mb-md">شماره تماس و آدرس</div>
+
+          <div class="q-mb-md">
+            <q-input
+              dir="ltr"
+              v-for="(phone, i) in formData.phoneEntries"
+              :key="i"
+              label="شماره تلفن مرکز"
+              filled
+              v-model="formData.phoneEntries[i]"
+              type="number"
+              :readonly="isFormPrePopulated"
+              lazy-rules
+              :rules="[(val) => val && val.length > 0]"
+            >
+              <template v-slot:after>
+                <div class="full-height">
+                  <q-btn
+                    v-if="i === formData.phoneEntries.length - 1"
+                    icon="add"
+                    flat
+                    class="full-height"
+                    @click="formData.phoneEntries.push('')"
+                    :disable="isFormPrePopulated"
+                  />
+                  <q-btn
+                    v-if="formData.phoneEntries.length > 1"
+                    icon="remove"
+                    flat
+                    class="full-height"
+                    @click="formData.phoneEntries.splice(i, 1)"
+                    :disable="isFormPrePopulated"
+                  />
+                </div>
+              </template>
+            </q-input>
+          </div>
+          <q-input
+            filled
+            v-model="formData.postalCode"
+            type="number"
+            label="کد پستی"
+            :readonly="isFormPrePopulated"
+            lazy-rules
+            :rules="[(val) => val && val.length > 0]"
+          />
+          <q-input
+            filled
+            v-model="formData.exactAddress"
+            label="نشانی دقیق"
+            :readonly="isFormPrePopulated"
+            lazy-rules
+            :rules="[(val) => val && val.length > 0]"
+          />
+        </div>
 
         <div
           class="full-width row items-center justify-center relative-position"
