@@ -31,7 +31,7 @@
 
         <div class="col-xs-12">
           <q-input
-            filled
+            outlined
             v-model="formData.registrationName"
             label="نام ثبتی مرکز"
             :readonly="isFormPrePopulated"
@@ -39,7 +39,7 @@
             :rules="[(val) => val && val.length > 0]"
           />
           <q-input
-            filled
+            outlined
             v-model="formData.brandName"
             label="نام برند"
             :readonly="isFormPrePopulated"
@@ -49,7 +49,7 @@
           <q-input
             dir="ltr"
             class="q-mb-lg"
-            filled
+            outlined
             v-model="formData.website"
             :readonly="isFormPrePopulated"
             label="وبسایت"
@@ -85,7 +85,7 @@
               v-for="(phone, i) in formData.phoneEntries"
               :key="i"
               label="شماره تلفن مرکز"
-              filled
+              outlined
               v-model="formData.phoneEntries[i]"
               type="number"
               :readonly="isFormPrePopulated"
@@ -115,7 +115,7 @@
             </q-input>
           </div>
           <q-input
-            filled
+            outlined
             v-model="formData.postalCode"
             type="number"
             label="کد پستی"
@@ -124,7 +124,7 @@
             :rules="[(val) => val && val.length > 0]"
           />
           <q-input
-            filled
+            outlined
             v-model="formData.exactAddress"
             label="نشانی دقیق"
             :readonly="isFormPrePopulated"

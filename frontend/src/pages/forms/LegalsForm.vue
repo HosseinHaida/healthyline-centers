@@ -31,7 +31,7 @@
 
         <div class="col-xs-12">
           <q-input
-            filled
+            outlined
             v-model="formData.firstName"
             label="نام"
             :readonly="isFormPrePopulated"
@@ -39,7 +39,7 @@
             :rules="[(val) => val && val.length > 0]"
           />
           <q-input
-            filled
+            outlined
             v-model="formData.lastName"
             label="نام خانوادگی"
             :readonly="isFormPrePopulated"
@@ -48,7 +48,7 @@
           />
           <q-select
             class="q-mb-lg"
-            filled
+            outlined
             v-model="formData.gender"
             :options="['مرد', 'زن', 'غیره']"
             label="جنسیت"
@@ -56,7 +56,7 @@
           />
           <q-input
             class="q-mb-lg q-mt-xl"
-            filled
+            outlined
             v-model="formData.rank"
             label="سمت (وضعیت)"
             hint="مدیر ..."
@@ -65,7 +65,7 @@
           <q-input
             dir="ltr"
             class="q-mb-lg q-mt-xl"
-            filled
+            outlined
             v-model="formData.phone"
             label="شماره موبایل"
             hint="0913xxxxxxx"

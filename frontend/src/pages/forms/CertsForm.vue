@@ -1,47 +1,105 @@
 <template>
-  <q-page class="q-px-sm q-pt-lg q-pb-xl">
-    <q-form @submit="onSubmit" @reset="onReset" class="row">
-      <div class="q-px-md col-xs-12 col-sm-6">
-        <q-input
-          filled
-          v-model="formData.name"
-          label="نام مجوز"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        />
+  <q-page class="q-px-sm" style="padding-bottom: 8rem">
+    <q-form @submit="onSubmit" @reset="onReset" class="row q-pt-lg">
+      <div class="col-12 q-mb-lg">
+        <div class="row items-center">
+          <div class="text-h5 text-grey-8 q-pl-lg">
+            <!-- <span v-if="!isFormPrePopulated">ثبت</span> -->
+            <!-- <span v-else>اطلاعات</span> -->
+            ثبت مجوز
+          </div>
+        </div>
       </div>
 
-      <div class="q-px-md col-xs-12 col-sm-6">
-        <q-input
-          filled
-          v-model="formData.type"
-          label="نوع مجوز"
-          lazy-rules
-          :rules="[(val) => val && val.length > 0]"
-        />
+      <div
+        class="col-xs-12 col-md-2 flex q-pt-lg justify-center gt-sm"
+        style="border-top: 1px solid #f2f2f2"
+      />
+
+      <div
+        class="col-xs-12 col-md-7 q-px-lg q-pt-lg rounded-borders"
+        style="background: #fcfcfc"
+      >
+        <div class="lt-md">
+          <div class="text-h6 text-grey-5">کلی</div>
+          <div class="text-caption text-grey-5 q-mb-md">نام و نشان</div>
+        </div>
+
+        <div class="col-xs-12">
+          <q-input
+            outlined
+            v-model="formData.name"
+            label="نام مجوز"
+            lazy-rules
+            :rules="[(val) => val && val.length > 0]"
+          />
+          <q-input
+            outlined
+            v-model="formData.type"
+            label="نوع مجوز"
+            lazy-rules
+            :rules="[(val) => val && val.length > 0]"
+          />
+        </div>
       </div>
 
-      <div class="q-px-md col-xs-12 col-md-6">
-        <FilePicker
-          @on-file-selected="formData.photo = $event"
-          icon="card_membership"
-          label="انتخاب تصویر مجوز"
-        />
+      <div class="col-3 gt-sm" />
+
+      <div
+        class="col-xs-12 col-md-2 flex q-pt-lg justify-center gt-sm"
+        style="border-top: 1px solid #f2f2f2"
+      >
+        <div class="column">
+          <div class="text-h6 text-grey-5">عکس مدرک</div>
+          <div class="text-caption text-grey-5 q-mb-md">
+            <!-- <span v-if="!isFormPrePopulated"> بارگزاری </span> -->
+            تصویر مجوز و تاریخ اعتبار
+          </div>
+        </div>
       </div>
 
-      <div class="q-px-md col-xs-12 col-md-6">
-        <q-date
-          v-model="formData.expires_at"
-          default-view="Years"
-          style="height: 23rem"
-          subtitle="تاریخ انقضا"
-          calendar="persian"
-        />
+      <div class="col-xs-12 col-md-7 q-px-lg q-pt-lg rounded-borders">
+        <div class="lt-md">
+          <div class="text-h6 text-grey-5">عکس مدرک</div>
+          <div class="text-caption text-grey-5 q-mb-md">
+            <!-- <span v-if="!isFormPrePopulated"> بارگزاری </span> -->
+            تصویر مجوز و تاریخ اعتبار
+          </div>
+        </div>
+
+        <div class="col-xs-12">
+          <div class="row justify-center">
+            <div class="col-xs-12 col col-md-7">
+              <!-- <div style="height: 23rem" v-if="isFormPrePopulated">
+                <q-badge class="q-px-sm q-py-xs">تصویر مجوز</q-badge>
+                <q-img
+                  fit="contain"
+                  style="max-height: 23rem; width: 23rem"
+                  :src="fetchedCertPhotoUrl"
+                />
+              </div> -->
+              <FilePicker
+                @on-file-selected="formData.photo = $event"
+                icon="card_membership"
+                label="انتخاب تصویر مجوز"
+              />
+            </div>
+            <div class="col-xs-12 col-md-auto q-pl-md">
+              <q-date
+                v-model="formData.expires_at"
+                default-view="Years"
+                style="height: 23rem"
+                subtitle="تاریخ انقضا"
+                calendar="persian"
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="fixed-bottom q-pa-md row justify-between bg-slate">
         <q-btn
-          label="نمایش تاریخچه"
+          label="نمایش مجوزها"
           type="submit"
           color="primary"
           icon="history"
