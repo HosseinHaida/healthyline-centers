@@ -75,7 +75,7 @@
           <div class="lt-md">
             <div class="text-h6 text-grey-5">تماس</div>
             <div class="text-caption text-grey-5 q-mb-md">
-              شماره تماس و آدرس
+              شماره تماس و نشانی
             </div>
           </div>
 
@@ -134,7 +134,9 @@
         </div>
 
         <div class="text-caption text-grey-7 q-pa-sm">
-          موقعیت مکانی آدرس را مشخص کنید.
+          موقعیت مکانی
+          <span v-if="isFormPrePopulated">مشخص شده.</span>
+          <span v-else> را مشخص کنید.</span>
         </div>
 
         <div
