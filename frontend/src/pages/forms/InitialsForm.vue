@@ -1,7 +1,7 @@
 <template>
-  <q-page class="q-px-sm q-pt-lg" style="padding-bottom: 100px">
+  <q-page class="q-px-sm" style="padding-bottom: 8rem">
     <q-form @submit="onSubmit" @reset="onReset" class="row q-pt-lg">
-      <div class="col-12 q-mb-md">
+      <div class="col-12 q-mb-lg">
         <div class="row items-center">
           <div class="text-h5 text-grey-8 q-pl-lg">
             <span v-if="!isFormPrePopulated">ثبت</span>
@@ -10,15 +10,25 @@
         </div>
       </div>
 
-      <div class="col-12">
-        <div class="row items-center">
-          <div class="col-4 bg-grey-4" style="height: 2px"></div>
+      <div
+        class="col-xs-12 col-md-2 flex q-pt-lg justify-center gt-sm"
+        style="border-top: 1px solid #f2f2f2"
+      >
+        <div class="column">
+          <div class="text-h6 text-grey-5">کلی</div>
+          <div class="text-caption text-grey-5 q-mb-md">نام و نشان</div>
         </div>
       </div>
 
-      <div class="col-xs-12 col-md-7 q-px-md q-mx-auto q-mb-md q-mt-md">
-        <div class="text-h6 text-grey-5">کلی</div>
-        <div class="text-caption text-grey-5 q-mb-md">نام و نشان</div>
+      <div
+        class="col-xs-12 col-md-7 q-px-lg q-pt-lg rounded-borders"
+        style="background: #fcfcfc"
+      >
+        <div class="lt-md">
+          <div class="text-h6 text-grey-5">کلی</div>
+          <div class="text-caption text-grey-5 q-mb-md">نام و نشان</div>
+        </div>
+
         <div class="col-xs-12">
           <q-input
             filled
@@ -48,16 +58,26 @@
         </div>
       </div>
 
-      <div class="col-12">
-        <div class="row items-center">
-          <div class="col-4 bg-grey-4" style="height: 2px"></div>
+      <div class="col-3 gt-sm" />
+
+      <div
+        class="col-xs-12 col-md-2 flex q-pt-lg justify-center gt-sm"
+        style="border-top: 1px solid #f2f2f2"
+      >
+        <div class="column">
+          <div class="text-h6 text-grey-5">تماس</div>
+          <div class="text-caption text-grey-5 q-mb-md">شماره تماس و آدرس</div>
         </div>
       </div>
 
-      <div class="col-xs-12 col-md-7 q-px-md q-mx-auto q-mt-md">
+      <div class="col-xs-12 col-md-7 q-pa-lg" style="background: #fcfcfc">
         <div class="col-xs-12">
-          <div class="text-h6 text-grey-5">تماس</div>
-          <div class="text-caption text-grey-5 q-mb-md">شماره تماس و آدرس</div>
+          <div class="lt-md">
+            <div class="text-h6 text-grey-5">تماس</div>
+            <div class="text-caption text-grey-5 q-mb-md">
+              شماره تماس و آدرس
+            </div>
+          </div>
 
           <div class="q-mb-md">
             <q-input
@@ -113,9 +133,13 @@
           />
         </div>
 
+        <div class="text-caption text-grey-7 q-pa-sm">
+          موقعیت مکانی آدرس را مشخص کنید.
+        </div>
+
         <div
-          class="full-width row items-center justify-center relative-position"
-          style="background: lightyellow; height: 25rem"
+          class="full-width row items-center justify-center relative-position rounded-borders"
+          style="height: 25rem"
           ref="mapContainer"
         >
           <q-btn
