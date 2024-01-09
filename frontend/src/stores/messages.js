@@ -18,4 +18,5 @@ export const messages = {
   certsAdded: "مجوز ذخیره شده و در انتظار تأیید است",
   specialistAdded: "اطلاعات کاشناس ذخیره شده و در انتظار تأیید است",
   equipmentAdded: "اطلاعات تجهیز ثبت شد",
+  orgInitialized: "سازمان ثبت شد و در انتظار تأیید است",
 };

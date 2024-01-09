@@ -1,14 +1,18 @@
 module.exports.up = async function (knex) {
-  await knex.schema.createTable("center_initials", (table) => {
+  await knex.schema.createTable("centers", (table) => {
     table.increments("id")
     // Main
     table.text("registration_name").notNullable()
-    table.text("brand_name").notNullable()
+    table.text("brand_name")
+    table.text("province")
+    table.text("city")
     table.text("gis")
-    table.text("postal_code").notNullable()
-    table.text("exact_address").notNullable()
-    table.specificType("phone", "text ARRAY").notNullable()
+    table.text("postal_code")
+    table.text("exact_address")
+    table.specificType("phone", "text ARRAY")
     table.text("website")
+    table.text("university")
+    table.text("representative_code")
     // Meta
     table.integer("created_by")
     table.integer("updated_by")
@@ -21,5 +25,5 @@ module.exports.up = async function (knex) {
 }
 
 module.exports.down = async function down(knex) {
-  await knex.schema.dropTable("center_initials")
+  await knex.schema.dropTable("centers")
 }

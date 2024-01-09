@@ -8,11 +8,8 @@ var logger = require("morgan")
 
 var indexRouter = require("./routes/index")
 var usersRouter = require("./routes/users")
-var centerInitialsRouter = require("./routes/centers/initials")
-var centerLegalsRouter = require("./routes/centers/legals")
-var centerCertsRouter = require("./routes/centers/certs")
-var centerSpecialistsRouter = require("./routes/centers/specialists")
-var centerEquipmentsRouter = require("./routes/centers/equipments")
+var centersRouter = require("./routes/centers.js")
+var manageRouter = require("./routes/manage.js")
 
 var app = express()
 
@@ -28,11 +25,8 @@ app.use(express.static(path.join(__dirname, "public")))
 
 app.use("/api/auth", usersRouter)
 app.use("/api/main", indexRouter)
-app.use("/api/centers/initials", centerInitialsRouter)
-app.use("/api/centers/legals", centerLegalsRouter)
-app.use("/api/centers/certs", centerCertsRouter)
-app.use("/api/centers/specialists", centerSpecialistsRouter)
-app.use("/api/centers/equipments", centerEquipmentsRouter)
+app.use("/api/centers", centersRouter)
+app.use("/api/manage", manageRouter)
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -47,7 +41,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.render("error")
+  res.json({ error: err })
 })
 
 module.exports = app

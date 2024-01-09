@@ -148,7 +148,7 @@
           flat
           outline
           :loading="pending"
-          to="/legals"
+          to="/center/legals"
         />
         <div v-if="!isFormPrePopulated">
           <q-btn

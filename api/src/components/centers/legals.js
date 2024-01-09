@@ -19,7 +19,7 @@ const addLegals = async (req, res) => {
 
   let center_initial
   try {
-    center_initial = await db("center_initials")
+    center_initial = await db("centers")
       .select("id", "created_by")
       .where({ created_by: user_id })
       .first()
@@ -134,7 +134,7 @@ const fetchItem = async (req, res) => {
       .where({ id })
       .first()
 
-    const isAdmin = checkIfAdmin(user_id, res)
+    const isAdmin = await checkIfAdmin(user_id, res)
     if (!isAdmin && item.created_by !== user_id)
       return catchError(errMessages.notAuthorized, "bad", res, error)
 

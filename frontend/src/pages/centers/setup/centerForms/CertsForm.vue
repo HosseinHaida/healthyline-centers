@@ -69,7 +69,7 @@
 
         <div class="col-xs-12">
           <div class="row justify-center">
-            <div class="col-xs-12 col col-md-7">
+            <div class="col-xs-12 col col-md-6">
               <!-- <div style="height: 23rem" v-if="isFormPrePopulated">
                 <q-badge class="q-px-sm q-py-xs">تصویر مجوز</q-badge>
                 <q-img

@@ -5,7 +5,7 @@ export const progressRaw = {
     type: "center",
     label: "ثبت مرکز",
     offset: 50,
-    to: "/center/new",
+    to: "/center/setup/new",
   },
   legals: {
     step: 2,
@@ -13,7 +13,7 @@ export const progressRaw = {
     type: "center",
     label: "تکمیل اطلاعات حقوقی",
     offset: 100,
-    to: "/legals/new",
+    to: "/center/setup/legals/new",
   },
   legals_approval: {
     step: 3,
@@ -28,7 +28,7 @@ export const progressRaw = {
     type: "center",
     label: "بارگزاری مجوزها",
     offset: 150,
-    to: "/certs/new",
+    to: "/center/setup/certs/new",
   },
   certs_approval: {
     step: 5,
@@ -43,7 +43,7 @@ export const progressRaw = {
     type: "center",
     label: "ثبت اطلاعات کارشناسان",
     offset: 100,
-    to: "/specialists/new",
+    to: "/center/setup/specialists/new",
   },
   equipments: {
     step: 7,
@@ -51,6 +51,6 @@ export const progressRaw = {
     type: "center",
     label: "ثبت اطلاعات تجهیزات",
     offset: 50,
-    to: "/equipments/new",
+    to: "/center/setup/equipments/new",
   },
 };

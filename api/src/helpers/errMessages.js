@@ -32,6 +32,7 @@ const errMessages = {
     "در صورت تمایل به دانلود این کیفیت یک اشتراک دلخواه خریداری نمایید",
   trxNotFound: "تراکنش یافت نشد",
   phoneShouldBeLike: " شماره همراه شامل ۱۱ رقم و شروع با 09",
+  phoneDuplicate: "شماره موبایل قبلاً ثبت شده است",
 
   noCentersInitialized: "مرکزی با اطلاعات اکانت شما یافت نشد",
   alreadyAddedACenter: "یک مرکز با اطلاعات حساب شما قبلا ثبت شده است",

@@ -12,7 +12,7 @@ const fetchProgress = async (req, res) => {
   try {
     let progress = {}
     //
-    const center_initial = await db("center_initials")
+    const center_initial = await db("centers")
       .select("id", "created_by", "created_at")
       .where({ created_by: user_id })
       .first()

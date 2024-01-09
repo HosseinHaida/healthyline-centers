@@ -13,7 +13,7 @@ const addEquipment = async (req, res) => {
 
   let center_initial
   try {
-    center_initial = await db("center_initials")
+    center_initial = await db("centers")
       .select("id", "created_by")
       .where({ created_by: user_id })
       .first()

@@ -4,49 +4,78 @@ const routes = [
     component: () => import("layouts/MainLayout.vue"),
     children: [
       {
-        path: "",
+        path: "/",
         name: "index",
         component: () => import("pages/IndexPage.vue"),
       },
+      // admin
       {
-        path: "login",
+        path: "/manage/centers",
+        name: "manageCenters",
+        component: () => import("pages/manage/centers/IndexPage.vue"),
+      },
+      {
+        path: "/manage/organizations",
+        name: "manageOrganizations",
+        component: () => import("pages/manage/orgs/IndexPage.vue"),
+      },
+      // centers
+      {
+        path: "/center/organizations",
+        name: "centerOrgsIndex",
+        component: () => import("pages/centers/orgs/IndexPage.vue"),
+      },
+      {
+        path: "/center/setup",
+        name: "centerSetupIndex",
+        component: () =>
+          import("pages/centers/setup/centerForms/IndexPage.vue"),
+      },
+      {
+        path: "/center/setup/new",
+        name: "centerNew",
+        component: () =>
+          import("pages/centers/setup/centerForms/InitialsForm.vue"),
+      },
+      {
+        path: "/center/setup/legals",
+        name: "centerLegalsList",
+        component: () => import("pages/centers/setup/lists/LegalsList.vue"),
+      },
+      {
+        path: "/center/setup/legals/:id",
+        name: "centerLegalsShow",
+        component: () =>
+          import("pages/centers/setup/centerForms/LegalsForm.vue"),
+      },
+      {
+        path: "/center/setup/legals/new",
+        name: "centerLegalsNew",
+        component: () =>
+          import("pages/centers/setup/centerForms/LegalsForm.vue"),
+      },
+      {
+        path: "/center/setup/certs/new",
+        name: "centerCertsNew",
+        component: () =>
+          import("pages/centers/setup/centerForms/CertsForm.vue"),
+      },
+      {
+        path: "/center/setup/specialists/new",
+        name: "centerSpecialistsNew",
+        component: () =>
+          import("pages/centers/setup/centerForms/SpecialistsForm.vue"),
+      },
+      {
+        path: "/center/setup/equipments/new",
+        name: "centerEquipmentsNew",
+        component: () =>
+          import("pages/centers/setup/centerForms/EquipmentsForm.vue"),
+      },
+      {
+        path: "/login",
         name: "login",
         component: () => import("pages/LoginPage.vue"),
-      },
-      {
-        path: "center/new",
-        name: "initialsNew",
-        component: () => import("pages/forms/InitialsForm.vue"),
-      },
-      {
-        path: "legals",
-        name: "legals",
-        component: () => import("pages/lists/LegalsList.vue"),
-      },
-      {
-        path: "legals/:id",
-        name: "legalsShow",
-        component: () => import("pages/forms/LegalsForm.vue"),
-      },
-      {
-        path: "legals/new",
-        name: "legalsNew",
-        component: () => import("pages/forms/LegalsForm.vue"),
-      },
-      {
-        path: "certs/new",
-        name: "certsNew",
-        component: () => import("pages/forms/CertsForm.vue"),
-      },
-      {
-        path: "specialists/new",
-        name: "specialistsNew",
-        component: () => import("pages/forms/SpecialistsForm.vue"),
-      },
-      {
-        path: "equipments/new",
-        name: "equipmentsNew",
-        component: () => import("pages/forms/EquipmentsForm.vue"),
       },
     ],
   },

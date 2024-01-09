@@ -14,7 +14,7 @@ module.exports.up = async function (knex) {
     table.timestamp("created_at")
     table.timestamp("updated_at")
     // Foreigns
-    table.foreign("center_id").references("center_initials.id")
+    table.foreign("center_id").references("centers.id")
     table.foreign("created_by").references("users.id")
     table.foreign("updated_by").references("users.id")
   })
