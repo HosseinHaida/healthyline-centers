@@ -64,8 +64,9 @@ const addCenter = async (req, res) => {
       return catchError(errMessages.notValidPhone, "bad", res)
 
     const created_at = moment(new Date())
-    const representative_code =
-      user_id + "_" + Date.now() + "_" + Math.floor(Math.random() * 10000)
+    const representative_code = `${user_id}-${Math.floor(
+      Math.random() * 100000
+    )}`
 
     await db
       .transaction(async function (trx) {
@@ -89,7 +90,6 @@ const addCenter = async (req, res) => {
             "id" // return row id after pending insert
           )
           .then(async (resp) => {
-            console.log(resp)
             if (!isAdmin) return true
             return await db("users")
               .transacting(trx)
