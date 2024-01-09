@@ -15,20 +15,12 @@
               label="همه موارد"
               color="info"
             />
-
             <q-btn
               unelevated
               dense
               class="q-px-sm q-py-none"
-              :label="orgStatus.pending.label"
-              :color="orgStatus.pending.color"
-            />
-            <q-btn
-              unelevated
-              dense
-              class="q-px-sm q-py-none"
-              :label="orgStatus.needs_edit.label"
-              :color="orgStatus.needs_edit.color"
+              :label="manageOrgStatus.needs_edit.label"
+              :color="manageOrgStatus.needs_edit.color"
             />
           </div>
 
@@ -54,19 +46,19 @@
       </div>
     </div>
 
-    <!-- <OrgsList v-if="!showForm" :list="list" @on-new-org="showForm = true" />
-    <NewOrgForm @new-org-created="onNewOrgCreated" v-else /> -->
+    <OrgsList :list="list" />
+    <!-- <NewOrgForm @new-org-created="onNewOrgCreated" v-else /> -->
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { orgStatus } from "src/stores/states";
+import { manageOrgStatus } from "src/stores/states";
 import { e2p } from "src/stores/helpers";
 import axios from "axios";
 
 // import NewOrgForm from "./NewOrgForm.vue";
-// import OrgsList from "./OrgsList.vue";
+import OrgsList from "./OrgsList.vue";
 
 import { apiUrl } from "src/stores/variables";
 import { useUserStore } from "src/stores/users-store";
@@ -91,11 +83,6 @@ const fetchList = async () => {
         return catchError(err);
       }
     );
-};
-
-const onNewOrgCreated = () => {
-  showForm.value = false;
-  fetchList();
 };
 
 onMounted(() => {

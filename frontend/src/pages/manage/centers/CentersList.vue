@@ -33,11 +33,11 @@
             <div class="row items-center no-wrap">
               <div class="col">
                 <div class="text-h6">{{ item.registration_name }}</div>
-                <div class="text-subtitle2 text-grey-6 q-mt-sm">
+                <div class="text-subtitle2 text-grey-7 q-mt-sm">
                   <q-icon name="person" />
                   {{ item.login_first_name + " " + item.login_last_name }}
                 </div>
-                <div class="text-subtitle2 text-grey-6">
+                <div class="text-subtitle2 text-grey-7">
                   <q-icon name="phone" />
                   {{ item.login_phone }}
                 </div>

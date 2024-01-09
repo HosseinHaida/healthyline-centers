@@ -37,39 +37,33 @@
           </div>
         </q-card-section>
 
+        <q-card-section class="q-py-none">
+          <q-icon name="handshake" size="sm" color="grey-7" />
+          {{ item.registration_name }}
+        </q-card-section>
         <q-card-section> {{ item.province }} - {{ item.city }} </q-card-section>
 
         <q-separator />
 
         <q-card-actions class="row justify-between">
-          <q-btn flat label="ویرایش" color="accent" />
+          <q-btn flat label="نمایش و تأیید" color="accent" />
 
           <div>
             <q-btn
+              v-if="item.status === 'needs_edit'"
               outline
-              :color="orgStatus[item.status].color"
-              :label="orgStatus[item.status].label"
+              :color="manageOrgStatus.needs_edit.color"
+              :label="manageOrgStatus.needs_edit.label"
             />
           </div>
         </q-card-actions>
-      </q-card>
-    </div>
-
-    <div class="col-xs-12 col-md-3 q-pa-xs" style="min-height: 100%">
-      <q-card
-        flat
-        bordered
-        class="full-height row items-center justify-center cursor-pointer add-new-entity-card-btn"
-        @click="emits('on-new-org')"
-      >
-        <q-icon name="add" color="grey" size="xl" flat />
       </q-card>
     </div>
   </div>
 </template>
 
 <script setup>
-import { orgStatus } from "src/stores/states";
+import { manageOrgStatus } from "src/stores/states";
 
 const props = defineProps(["list"]);
 const emits = defineEmits(["on-new-org"]);
