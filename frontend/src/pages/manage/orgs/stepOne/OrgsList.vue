@@ -11,7 +11,7 @@
             <div class="col">
               <div class="text-h6">{{ item.name }}</div>
               <div>{{ item.size }}</div>
-              <div class="text-subtitle2 text-grey-7 q-mt-sm">
+              <div class="text-subtitle2 text-grey-7 q-mt-sm q-mb-xs">
                 <q-icon name="person" />
                 {{ item.login_first_name + " " + item.login_last_name }}
               </div>
@@ -37,7 +37,7 @@
           </div>
         </q-card-section>
 
-        <q-card-section class="q-py-none">
+        <q-card-section class="q-py-none text-subtitle1">
           <q-icon name="handshake" size="sm" color="grey-7" />
           {{ item.registration_name }}
         </q-card-section>
@@ -46,7 +46,12 @@
         <q-separator />
 
         <q-card-actions class="row justify-between">
-          <q-btn flat label="نمایش و تأیید" color="accent" />
+          <q-btn
+            flat
+            label="نمایش و تأیید"
+            color="accent"
+            @click="emits('on-select-org', item.id)"
+          />
 
           <div>
             <q-btn
@@ -66,7 +71,7 @@
 import { manageOrgStatus } from "src/stores/states";
 
 const props = defineProps(["list"]);
-const emits = defineEmits(["on-new-org"]);
+const emits = defineEmits(["on-new-org", "on-select-org"]);
 </script>
 
 <style lang="sass" scoped></style>

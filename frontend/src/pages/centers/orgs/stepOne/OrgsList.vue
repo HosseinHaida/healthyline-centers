@@ -11,7 +11,7 @@
             <div class="col">
               <div class="text-h6">{{ item.name }}</div>
               <div>{{ item.size }}</div>
-              <div class="text-subtitle2 text-grey-7 q-mt-sm">
+              <div class="text-subtitle2 text-grey-7 q-mt-sm q-mb-xs">
                 <q-icon name="person" />
                 {{ item.login_first_name + " " + item.login_last_name }}
               </div>

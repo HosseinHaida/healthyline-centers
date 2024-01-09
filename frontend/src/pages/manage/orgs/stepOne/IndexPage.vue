@@ -4,7 +4,7 @@
       class="row items-center q-py-sm q-mb-lg justify-between"
       style="border-bottom: 1px solid #f2f2f2; border-top: 1px solid #f2f2f2"
     >
-      <div class="col-xs-12" v-if="!showForm">
+      <div class="col-xs-12" v-if="!selectedOrg">
         <div class="row justify-between items-center">
           <div class="flex q-gutter-sm items-center">
             <div>نمایش:</div>
@@ -14,6 +14,7 @@
               class="q-px-sm q-py-none"
               label="همه موارد"
               color="info"
+              @click="fetchList(null)"
             />
             <q-btn
               unelevated
@@ -21,6 +22,7 @@
               class="q-px-sm q-py-none"
               :label="manageOrgStatus.needs_edit.label"
               :color="manageOrgStatus.needs_edit.color"
+              @click="fetchList('needs_edit')"
             />
           </div>
 
@@ -38,7 +40,7 @@
             flat
             dense
             class="q-px-sm"
-            @click="showForm = false"
+            @click="selectedOrg = null"
             icon-right="keyboard_backspace"
             label="بازگشت"
           />
@@ -46,8 +48,16 @@
       </div>
     </div>
 
-    <OrgsList :list="list" />
-    <!-- <NewOrgForm @new-org-created="onNewOrgCreated" v-else /> -->
+    <OrgsList
+      v-if="!selectedOrg"
+      @on-select-org="selectedOrg = $event"
+      :list="list"
+    />
+    <ApproveOrgForm
+      v-else
+      :org="list.filter((item) => selectedOrg === item.id)[0]"
+      @on-update-org="fetchList"
+    />
   </div>
 </template>
 
@@ -57,8 +67,8 @@ import { manageOrgStatus } from "src/stores/states";
 import { e2p } from "src/stores/helpers";
 import axios from "axios";
 
-// import NewOrgForm from "./NewOrgForm.vue";
 import OrgsList from "./OrgsList.vue";
+import ApproveOrgForm from "./ApproveOrgForm.vue";
 
 import { apiUrl } from "src/stores/variables";
 import { useUserStore } from "src/stores/users-store";
@@ -66,13 +76,15 @@ import { catchError } from "src/stores/action-helpers";
 
 const userStore = useUserStore();
 
-const showForm = ref(false);
-
+const selectedOrg = ref(null);
 const list = ref([]);
 
-const fetchList = async () => {
+const fetchList = async (status) => {
+  selectedOrg.value = null;
+  let url = `/manage/orgs/list`;
+  if (status) url = url + `/${status}`;
   await axios
-    .get(apiUrl + "/manage/orgs/list", {
+    .get(apiUrl + url, {
       headers: { token: userStore.t },
     })
     .then(
