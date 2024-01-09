@@ -2,7 +2,6 @@ module.exports.up = async function (knex) {
   await knex.schema.createTable("orgs", (table) => {
     table.increments("id")
     table.integer("center_id")
-    table.text("status").defaultTo("pending")
     // Main
     table.text("name").notNullable()
     table.text("main_org_code", 5)
