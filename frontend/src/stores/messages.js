@@ -19,4 +19,5 @@ export const messages = {
   specialistAdded: "اطلاعات کاشناس ذخیره شده و در انتظار تأیید است",
   equipmentAdded: "اطلاعات تجهیز ثبت شد",
   orgInitialized: "سازمان ثبت شد و در انتظار تأیید است",
+  orgUpdated: "وضعیت سازمان بروزرسانی شد",
 };
